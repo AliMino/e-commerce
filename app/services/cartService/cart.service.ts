@@ -33,4 +33,9 @@ export class CartService {
     if(!localStorage.getItem("cart"))
       localStorage.setItem("cart", JSON.stringify(this.productsInCart));
   }
+
+  removeProduct(productId: string): void {
+    this.productsInCart[productId] = 0;
+    localStorage.setItem("cart", JSON.stringify(this.productsInCart));
+  }
 }

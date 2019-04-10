@@ -37,8 +37,12 @@ export class CartComponent implements OnInit {
     return price;
   }
 
-  removeFromCart(productId: number): void {
-    this.cartService.productsInCart[productId] = 0;
+  removeFromCart(productId: string): void {
+    this.cartService.removeProduct(productId);
+    this.cart_products.forEach((product) => {
+      if(product.id == productId)
+        this.cart_products.splice(this.cart_products.indexOf(product), 1);
+    });
     
   }
 }

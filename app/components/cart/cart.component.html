@@ -30,7 +30,12 @@
                   </li>
               </ul>
               <br>
-              <h4>total price: {{getTotalPrice()}}</h4>
+              <div *ngIf="getTotalPrice() == 0">
+                <h4>there are no items in cart!</h4>
+              </div>
+              <div *ngIf="getTotalPrice() != 0">
+                <h4>total price: {{getTotalPrice()}}</h4>
+              </div>
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
