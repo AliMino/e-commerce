@@ -1,0 +1,16 @@
+<div class="div-center">
+<div class="card" style="width: 30rem;">
+  <div class="card-body">
+    <h1 class="display-3 text-center card-title">{{product.name}}</h1>
+  </div>
+  <img [src]="product.picUrl" class="card-img-top" alt="...">
+  <div class="card-body">
+    <br>
+    <p class="card-text"><mark><label>Description:</label></mark>{{product.description}}</p>
+  </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><mark><label>Category:</label></mark>{{product.category}}</li>
+      <li class="list-group-item"><mark><label>Price:</label></mark>{{product.price}}</li>
+    </ul>
+  </div>
+</div>
