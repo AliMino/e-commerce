@@ -1,0 +1,27 @@
+<div>
+  <div class="text-center">
+    <h5>{{product.name}}</h5>
+  </div>
+  <div class="text-center">
+    <a [routerLink]="product.id">
+      <img [src]="product.picUrl">
+    </a>
+  </div>
+  <div class="text-center">
+    <label>price
+      <mark>
+        {{product.price}}
+      </mark>
+    </label>
+  </div>
+  <br>
+  <div class="text-center">
+    <button class="btn btn-warning" style="margin-right:10px" (click)="cartClicked()">
+      <i class="fas fa-shopping-cart"></i>
+    </button>
+    <button class="btn btn-secondary" (click)="wishClicked()">
+      <i class="fas fa-align-left"></i>
+    </button>
+  </div>
+  <hr>
+</div>
