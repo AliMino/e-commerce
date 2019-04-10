@@ -1,8 +1,41 @@
-<div>
+<div data-toggle="modal" data-target="#cart-products" (click)="updateCartModal()">
   <a class="nav-link">
     <i class="fas fa-cart-arrow-down">
       <span> {{purchasedProductsCount}} </span>
     </i>
   </a>
+</div>
 
+
+<div class="modal fade" id="cart-products" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="cart-title">Cart</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center"
+                      *ngFor="let product of cart_products">
+                      <img [src]="product.picUrl" alt="product-image" class="cart-image">
+                      <div>
+                        <span>{{product.name}}</span>
+                        <h6>(quantity: {{getQuantity(product)}})</h6>
+                      </div>
+                      <span>$ {{product.price}} (total:{{product.price * getQuantity(product)}})</span>
+                      <button class="btn btn-danger del-btn" title="delete item" (click)="removeFromCart(product.id)">x</button>
+                  </li>
+              </ul>
+              <br>
+              <h4>total price: {{getTotalPrice()}}</h4>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <a routerLink="/" id="checkout" type="button" class="btn btn-success" data-dismiss="modal">Checkout</a>
+          </div>
+      </div>
+  </div>
 </div>
