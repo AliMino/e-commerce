@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WishlistService } from 'src/app/services/wishListService/wishlist.service';
+import { Product } from 'src/app/models/product';
+import { CartService } from 'src/app/services/cartService/cart.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -8,12 +10,31 @@ import { WishlistService } from 'src/app/services/wishListService/wishlist.servi
 })
 export class WishlistComponent implements OnInit {
   wishedProductsCount: number = 0;
+  wishedProducts: Product[] = [];
 
-  constructor(private wishlistService: WishlistService) {
-  }
+  constructor(
+    private wishlistService: WishlistService,
+    private cartService: CartService
+    ) { }
   
   ngOnInit() {
     this.wishlistService.observable.subscribe(() => this.wishedProductsCount = this.wishlistService.getProductsCount());
+  }
+
+  getWishedProducts(): Product[] {
+    return this.wishlistService.products;
+  }
+
+  updateWishlist(): void {
+    this.wishedProducts = this.getWishedProducts();
+  }
+
+  addTocart(product: Product): void {
+    this.cartService.addToCart(product);
+  }
+
+  removeFromWishlist(product: Product): void {
+    this.wishlistService.removeFromWishlist(product);
   }
 
 }

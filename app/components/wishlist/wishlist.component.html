@@ -1,7 +1,39 @@
-<div>
-  <a href="" class="nav-link">
+<div data-toggle="modal" data-target="#wished-products" (click)="updateWishlist()">
+  <a class="nav-link">
     <i class="fa fa-heart">
       <span> {{wishedProductsCount}} </span>
     </i>
   </a>
 </div>
+
+
+<div class="modal fade" id="wished-products" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cart-title">Wishlist</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngFor="let p of wishedProducts">
+                        <img [src]="p.picUrl" alt="product-image" class="cart-image">
+                        <div>
+                          <span>{{p.name}}</span>
+                        </div>
+                        <span>$ {{p.price}}</span>
+                        <button class="btn btn-primary del-btn" title="add to cart" (click)="addTocart(p)"><i class="fas fa-cart-arrow-down"></i></button>
+                        <button class="btn btn-danger del-btn" title="remove from wishlist" (click)="removeFromWishlist(p)">x</button>
+                    </li>
+                </ul>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
