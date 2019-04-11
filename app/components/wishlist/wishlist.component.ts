@@ -27,14 +27,17 @@ export class WishlistComponent implements OnInit {
 
   updateWishlist(): void {
     this.wishedProducts = this.getWishedProducts();
+    this.wishedProductsCount = this.wishlistService.getProductsCount();
   }
 
   addTocart(product: Product): void {
     this.cartService.addToCart(product);
+    this.updateWishlist();
   }
 
   removeFromWishlist(product: Product): void {
     this.wishlistService.removeFromWishlist(product);
+    this.updateWishlist();
   }
 
 }

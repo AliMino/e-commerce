@@ -18,8 +18,12 @@ export class CartService {
 
   addToCart(product: Product) {
     this.productsInCart[product.id]++;
-    this.observable.next(this.getProductsCount());
+    this.updateCounter();
     localStorage.setItem("cart", JSON.stringify(this.productsInCart));
+  }
+
+  updateCounter(): void {
+    this.observable.next(this.getProductsCount());
   }
 
   getProductsCount(): number {
@@ -36,6 +40,7 @@ export class CartService {
 
   removeProduct(productId: string): void {
     this.productsInCart[productId] = 0;
+    this.updateCounter();
     localStorage.setItem("cart", JSON.stringify(this.productsInCart));
   }
 
