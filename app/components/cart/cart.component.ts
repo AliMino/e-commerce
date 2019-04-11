@@ -43,6 +43,6 @@ export class CartComponent implements OnInit {
       if(product.id == productId)
         this.cart_products.splice(this.cart_products.indexOf(product), 1);
     });
-    
+    this.purchasedProductsCount = this.cartService.getProductsCount();
   }
 }

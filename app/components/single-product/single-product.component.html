@@ -3,7 +3,7 @@
     <h5>{{product.name}}</h5>
   </div>
   <div class="text-center">
-    <a [routerLink]="product.id">
+    <a [routerLink]="['/product/', product.id]">
       <img [src]="product.picUrl">
     </a>
   </div>

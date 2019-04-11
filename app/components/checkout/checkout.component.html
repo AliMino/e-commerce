@@ -1,0 +1,47 @@
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Product image</th>
+        <th>Product name</th>
+        <th>Product category</th>
+        <th>Product price</th>
+        <th>Quantity in cart</th>
+        <th>Total price</th>
+        <th>Remove product</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of productsInCart">
+        <td>
+          <img [src]="p.picUrl">
+        </td>
+        <td>{{p.name}}</td>
+        <td>{{p.category}}</td>
+        <td>{{p.price}}</td>
+        <td>{{getQuantity(p)}}</td>
+        <td>{{getQuantity(p) * p.price}}</td>
+        <td>
+          <button class="btn btn-warning" (click)="removeProduct(p)">
+            Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <table id="totalPrice">
+    <thead>
+      <tr>
+        <th>Total price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <h3><I> ${{getTotalPrice()}} </I></h3>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

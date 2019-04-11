@@ -38,4 +38,10 @@ export class CartService {
     this.productsInCart[productId] = 0;
     localStorage.setItem("cart", JSON.stringify(this.productsInCart));
   }
+
+  getTotalPrice(): number {
+    let price = 0;
+    this.productsService.products.forEach((product) => price += this.productsInCart[product.id] * product.price);
+    return price;
+  }
 }

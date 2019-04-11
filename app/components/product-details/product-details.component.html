@@ -11,6 +11,11 @@
     <ul class="list-group list-group-flush">
       <li class="list-group-item"><mark><label>Category:</label></mark>{{product.category}}</li>
       <li class="list-group-item"><mark><label>Price:</label></mark>{{product.price}}</li>
+      <li class="list-group-item">
+        <button class="btn btn-primary" (click)="addToCart()">Add to cart</button>
+        <button class="btn btn-secondary" (click)="addToWishlist()">Add to wishlist</button>
+      </li>
+      
     </ul>
   </div>
 </div>
