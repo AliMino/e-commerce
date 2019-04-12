@@ -13,6 +13,11 @@ import { CartComponent } from './components/cart/cart.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { LoginComponent } from './components/login/login.component';
+import { LogoutComponent } from './components/logout/logout.component';
+import { RegisterComponent } from './components/register/register.component';
+import { UsernameComponent } from './components/username/username.component';
 
 @NgModule({
   declarations: [
@@ -27,10 +32,16 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     NavigationComponent,
     CheckoutComponent,
     NotFoundComponent,
+    LoginComponent,
+    LogoutComponent,
+    RegisterComponent,
+    UsernameComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
