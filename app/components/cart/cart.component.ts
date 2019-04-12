@@ -18,7 +18,7 @@ export class CartComponent implements OnInit {
     this.cartService.observable.subscribe(() => this.purchasedProductsCount = this.cartService.getProductsCount());
   }
   
-  updateCartModal() {
+  updateCartModal(): void {
     this.cart_products.splice(0, this.cart_products.length);
     this.productsService.products.forEach((product) => {
       if(this.cartService.productsInCart[product.id] > 0)

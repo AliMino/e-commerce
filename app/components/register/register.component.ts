@@ -26,10 +26,7 @@ export class RegisterComponent implements OnInit {
       });
   }
 
-
-
-
-  onSubmit() {
+  onSubmit(): void {
     if (this.registerForm.status == "VALID") {
 
       console.log("Validated successfully")
@@ -37,13 +34,8 @@ export class RegisterComponent implements OnInit {
         "userName": this.registerForm.value.userName,
         "password": this.registerForm.value.password
       };
-      // alert("you registered successfully !!");
-      // this.router.navigate(['login']);
       localStorage.setItem(user.userName, JSON.stringify(user));
       this.message = "You've registered successfully!";
-    } else {
-      console.log("invalid registration")
-      console.log(this.registerForm);
     }
   }
 

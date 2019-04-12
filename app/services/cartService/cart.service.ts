@@ -32,7 +32,7 @@ export class CartService {
     return count;
   }
 
-  initializeCart() {
+  initializeCart(): void {
     this.productsService.products.forEach((product) => this.productsInCart[product.id] = 0);
     if(!localStorage.getItem("cart"))
       localStorage.setItem("cart", JSON.stringify(this.productsInCart));

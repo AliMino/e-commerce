@@ -16,13 +16,13 @@ export class SingleProductComponent implements OnInit {
   ngOnInit() {
   }
 
-  wishClicked() {
+  wishClicked(): void {
     if(this.wishlistService.products.indexOf(this.product) == -1)
       this.wishlistService.addToWishlist(this.product);
     else alert('you have already added this product to wishlist!');
   }
 
-  cartClicked() {
+  cartClicked(): void {
     this.cartService.addToCart(this.product);
   }
 

@@ -14,7 +14,7 @@ export class LogoutComponent implements OnInit {
   ngOnInit() {
   }
 
-  logout() {
+  logout(): void {
     let answer = confirm('Are you sure you want to Logout?');
     if (answer) {
       localStorage.removeItem('currentUser');

@@ -15,13 +15,11 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(4)]),
 
   });
-  constructor(private user: LoginService, private router: Router) {
-
-  }
+  constructor(private user: LoginService, private router: Router) { }
 
   ngOnInit() {
   }
-  onSubmit() {
+  onSubmit(): void {
     if (this.LoginForm.status == "VALID") {
       let storageUser = JSON.parse(localStorage.getItem(this.LoginForm.value.userName));
       
