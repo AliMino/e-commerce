@@ -6,7 +6,6 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      
       <li class="nav-item">
         <app-wishlist></app-wishlist>
       </li>
@@ -14,5 +13,17 @@
         <app-cart></app-cart>
       </li>
     </ul>
+    <span *ngIf="!isRegisteredUser()">
+      <button class="btn btn-dark" routerLink="login">
+        login
+      </button>
+      <button class="btn btn-dark" routerLink="register">
+        register
+      </button>
+    </span>
+    <span *ngIf="isRegisteredUser()">
+      <app-username></app-username>
+    </span>
+    {{isRegisteredUser()}}
   </div>
 </nav>
