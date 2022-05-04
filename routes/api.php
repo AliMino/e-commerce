@@ -20,10 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group([ 'prefix' => 'tenants' ], function() {
+Route::group([ 'prefix' => 'tenants' ],                         __DIR__ . '/api/tenants.php');
 
-    Route::get('me', [ 'uses' => TenantController::class . '@getCurrentTenant' ])->middleware('tenant');
-
-    Route::post('', [ 'uses' => TenantController::class . '@createTenant' ]);
-
-});
+Route::group([ 'prefix' => 'users', 'middleware' => 'tenant' ], __DIR__ . '/api/users.php');
