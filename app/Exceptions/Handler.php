@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Exceptions\Api\ApiException;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\Api\{ UnknownSubdomainException, NoSubdomainProvidedException };
 
 class Handler extends ExceptionHandler
 {
@@ -37,5 +40,22 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof ApiException) {
+            return response()->json([ 'status' => false, 'data' => null, 'error' => $e->toArray() ], $e->getHttpStatusCode());
+        }
+
+        if ($e instanceof \Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedOnDomainException) {
+            throw new UnknownSubdomainException(explode('.', $request->getHost())[0]);
+        }
+
+        if ($e instanceof \Stancl\Tenancy\Exceptions\NotASubdomainException) {
+            throw new NoSubdomainProvidedException();
+        }
+     
+        throw new ApiException($e->getMessage(), 0, Response::HTTP_INTERNAL_SERVER_ERROR, [], $e);
     }
 }
