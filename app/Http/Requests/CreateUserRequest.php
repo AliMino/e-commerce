@@ -6,11 +6,10 @@ namespace App\Http\Requests;
  * Create User Request.
  * 
  * @api
- * @abstract
  * @version 1.0.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
-abstract class CreateUserRequest extends ApiRequest {
+class CreateUserRequest extends ApiRequest {
 
     /**
      * Gets the validation rules to be applied to inputs of this request.

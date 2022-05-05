@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Exceptions\Api\EntityNotFoundException;
 use App\Models\User;
 use App\Repositories\UsersRepository;
+use App\Exceptions\Api\{ EntityNotFoundException, UserEmailAlreadyExistsException };
 
 /**
  * User Business Service.
  * 
  * @api
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 class UserService {
@@ -60,7 +60,7 @@ class UserService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param string $name
      * @param string $email
@@ -69,8 +69,13 @@ class UserService {
      * @return User
      * 
      * @throws EntityNotFoundException If the specified role doesn't exist.
+     * @throws UserEmailAlreadyExistsException
      */
     public final function createUser(string $name, string $email, string $password, string $roleName): User {
+        if (!is_null($this->usersRepository->getUserByEmail($email))) {
+            throw new UserEmailAlreadyExistsException($email);
+        }
+
         return $this->usersRepository->createUser(
             $name,
             $email,

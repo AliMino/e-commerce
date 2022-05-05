@@ -9,7 +9,7 @@ use App\Models\User;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class UsersRepository {
@@ -36,5 +36,26 @@ final class UsersRepository {
 
         });
         
+    }
+
+    /**
+     * Retrieves the user having the specified email.
+     * 
+     * @api
+     * @final
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @param string $email
+     * @return \App\Models\User|null
+     */
+    public final function getUserByEmail(string $email): ?User {
+
+        return tenant()->run(function() use ($email) {
+        
+            return User::where('email', $email)->first();
+
+        });
+
     }
 }

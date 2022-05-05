@@ -24,4 +24,6 @@ Route::group([ 'prefix' => 'tenants' ],                         __DIR__ . '/api/
 
 Route::group([ 'prefix' => 'merchants' ],                       __DIR__ . '/api/merchants.php');
 
+Route::group([ 'prefix' => 'consumers' ],                       __DIR__ . '/api/consumers.php');
+
 Route::group([ 'prefix' => 'users', 'middleware' => 'tenant' ], __DIR__ . '/api/users.php');

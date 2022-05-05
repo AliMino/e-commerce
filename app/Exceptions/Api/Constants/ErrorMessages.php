@@ -7,7 +7,7 @@ namespace App\Exceptions\Api\Constants;
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ErrorMessages {
@@ -17,6 +17,7 @@ final class ErrorMessages {
     private const INVALID_INPUTS        = 'Invalid inputs.';
     private const ENTITY_NOT_FOUND      = "Entity `%s(%s)` doesn't exists.";
     private const UN_AUTHORIZED_ACCESS  = "Unauthorized access.";
+    private const EMAIL_ALREADY_EXISTS  = "The provided email address already in use.";
 
     public static final function unknownSubdomain(string $subdomain): string {
         return sprintf(self::UNKNWON_SUBDOMAIN, $subdomain);
@@ -36,5 +37,9 @@ final class ErrorMessages {
 
     public static final function unAuthorizedAccess(): string {
         return self::UN_AUTHORIZED_ACCESS;
+    }
+
+    public static final function emailAlreadyExists(): string {
+        return self::EMAIL_ALREADY_EXISTS;
     }
 }

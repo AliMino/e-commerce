@@ -59,6 +59,7 @@ the `details` field holds an extra details about the error - optionally provided
 |    Request Name |          URL           | Allowed For |
 | --------------: | :--------------------: | :---------- |
 | Signup Merchant | api/merchants/register | World       |
+| Signup Consumer | api/consumers/register | World       |
 
 ---
 
