@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Api Exception.
  * 
  * @api
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 class ApiException extends Exception {
@@ -69,14 +69,15 @@ class ApiException extends Exception {
      * 
      * @api
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
+     * @param boolean $withDetails
      * @return mixed[]
      */
-    public function toArray(): array {
+    public function toArray(bool $withDetails = false): array {
         return array_merge(
             [ 'message' => $this->getMessage(), 'code' => $this->getCode() ],
-            0 == count($details = $this->details) ? [] : compact('details')
+            !$withDetails || 0 == count($details = $this->details) ? [] : compact('details')
         );
     }
 }

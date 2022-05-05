@@ -22,4 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group([ 'prefix' => 'tenants' ],                         __DIR__ . '/api/tenants.php');
 
+Route::group([ 'prefix' => 'merchants' ],                       __DIR__ . '/api/merchants.php');
+
 Route::group([ 'prefix' => 'users', 'middleware' => 'tenant' ], __DIR__ . '/api/users.php');

@@ -4,7 +4,7 @@
  * Seeding arguments and data.
  * 
  * @internal
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  * @see \Database\Seeders\DatabaseSeeder
  */
@@ -25,8 +25,8 @@ return [
 
         'user_roles' => [
 
-            'merchant',
-            'consumer'
+            App\Constants\Roles::MERCHANT,
+            App\Constants\Roles::CONSUMER
 
         ]
 

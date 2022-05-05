@@ -10,7 +10,7 @@ use Illuminate\Http\{ Request, JsonResponse };
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class TenantController extends ApiController {
@@ -21,7 +21,7 @@ final class TenantController extends ApiController {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param Request $request
      * @return JsonResponse
@@ -33,7 +33,7 @@ final class TenantController extends ApiController {
 
         $tenant->domains()->create([ 'domain' => $request->input('domain') ]);
 
-        return $this->apiResponse([ 'tenant' => $tenant ]);
+        return $this->getSuccessResponse($tenant);
     }
 
     /**
@@ -42,11 +42,11 @@ final class TenantController extends ApiController {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @return JsonResponse
      */
     public final function getCurrentTenant(): JsonResponse {
-        return $this->apiResponse([ 'tenant' => tenant() ]);
+        return $this->getSuccessResponse(tenant());
     }
 }
