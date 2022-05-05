@@ -7,7 +7,7 @@ namespace App\Exceptions\Api\Constants;
  * 
  * @api
  * @final
- * @version 1.2.0
+ * @version 1.3.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ErrorCodes {
@@ -20,5 +20,6 @@ final class ErrorCodes {
 
     public const ENTITY_NOT_FOUND           = 5;
     public const EMAIL_ALREADY_EXISTS       = 6;
+    public const INVALID_USER_CREDENTIALS   = 7;
 
 }

@@ -56,10 +56,12 @@ the `details` field holds an extra details about the error - optionally provided
 
 ## Available Requests
 
-|    Request Name |          URL           | Allowed For |
-| --------------: | :--------------------: | :---------- |
-| Signup Merchant | api/merchants/register | World       |
-| Signup Consumer | api/consumers/register | World       |
+| Request Group |          Request Name |          URL           | Allowed For |
+| ------------: | --------------------: | :--------------------: | :---------- |
+|     Merchants |       Signup Merchant | api/merchants/register | World       |
+|     Merchants | Authenticate Merchant |  api/merchants/login   | World       |
+|     Consumers |       Signup Consumer | api/consumers/register | World       |
+|     Consumers | Authenticate Consumer |  api/consumers/login   | World       |
 
 ---
 

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class GeneralService {
@@ -67,6 +67,22 @@ final class GeneralService {
      */
     public final function hash(string $string): string {
         return Hash::make($string);
+    }
+
+    /**
+     * Checks whether the specified string matches the specified hash, or not.
+     * 
+     * @api
+     * @final
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @param string $string
+     * @param string $hash
+     * @return boolean
+     */
+    public final function checkHash(string $string, string $hash): bool {
+        return Hash::check($string, $hash);
     }
 
     /**

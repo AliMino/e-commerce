@@ -11,7 +11,7 @@ use App\Repositories\UsersRepository;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class MerchantService extends UserService {
@@ -68,5 +68,24 @@ final class MerchantService extends UserService {
 
         return $merchant->load('store');
         
+    }
+
+    /**
+     * Authenticate merchant and retrieves the access token.
+     * 
+     * @api
+     * @final
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @param string $email
+     * @param string $password
+     * @return string
+     * 
+     * @throws InvalidUserCredentialsException
+     * @throws UnauthorizedAccessException
+     */
+    public final function authenticateMerchant(string $email, string $password): string {
+        return $this->authenticateUser($email, $password, Roles::MERCHANT);
     }
 }

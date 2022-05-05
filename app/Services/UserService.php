@@ -4,13 +4,13 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\UsersRepository;
-use App\Exceptions\Api\{ EntityNotFoundException, UserEmailAlreadyExistsException };
+use App\Exceptions\Api\{ EntityNotFoundException, InvalidUserCredentialsException, UnauthorizedAccessException, UserEmailAlreadyExistsException };
 
 /**
  * User Business Service.
  * 
  * @api
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 class UserService {
@@ -82,5 +82,36 @@ class UserService {
             $this->generalService->hash($password),
             $this->roleService->getRole($roleName)->id
         );
+    }
+
+    /**
+     * Authenticate user and retrieves the access token.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param string $email
+     * @param string $password
+     * @param string $role
+     * @return string
+     * 
+     * @throws InvalidUserCredentialsException
+     * @throws UnauthorizedAccessException
+     */
+    public final function authenticateUser(string $email, string $password, string $role): string {
+        if (is_null($user = $this->usersRepository->getUserByEmail($email))) {
+            throw new InvalidUserCredentialsException($email);
+        }
+        if (!$this->generalService->checkHash($password, $user->password)) {
+            throw new InvalidUserCredentialsException($email, $password);
+        }
+        
+        if ($role != $user->role->name) {
+            throw new UnauthorizedAccessException("$role required");
+        }
+
+        return $user->createToken('auth-token')->plainTextToken;
     }
 }

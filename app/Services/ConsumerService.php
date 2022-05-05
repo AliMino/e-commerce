@@ -10,7 +10,7 @@ use App\Constants\Roles;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ConsumerService extends UserService {
@@ -29,8 +29,25 @@ final class ConsumerService extends UserService {
      * @return User
      */
     public final function createConsumer(string $name, string $email, string $password): User {
-        
         return $this->createUser($name, $email, $password, Roles::CONSUMER)->load('role');
-        
+    }
+
+    /**
+     * Authenticate consumer and retrieves the access token.
+     * 
+     * @api
+     * @final
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @param string $email
+     * @param string $password
+     * @return string
+     * 
+     * @throws InvalidUserCredentialsException
+     * @throws UnauthorizedAccessException
+     */
+    public final function authenticateConsumer(string $email, string $password): string {
+        return $this->authenticateUser($email, $password, Roles::CONSUMER);
     }
 }

@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Services\ConsumerService;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\{ AuthenticationRequest, CreateUserRequest };
 
 /**
  * Consumer Controller.
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ConsumerController extends ApiController {
@@ -53,6 +53,26 @@ final class ConsumerController extends ApiController {
         return $this->getSuccessResponse(
             $this->consumerService->createConsumer(
                 $request->input('name'),
+                $request->input('email'),
+                $request->input('password')
+            )
+        );
+    }
+
+    /**
+     * Authenticate a consumer.
+     * 
+     * @api
+     * @final
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @param AuthenticationRequest $request
+     * @return JsonResponse
+     */
+    public final function authenticateConsumer(AuthenticationRequest $request): JsonResponse {
+        return $this->getSuccessResponse(
+            $this->consumerService->authenticateConsumer(
                 $request->input('email'),
                 $request->input('password')
             )

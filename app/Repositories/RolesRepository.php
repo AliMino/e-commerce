@@ -9,7 +9,7 @@ use App\Models\Role;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.0.1
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class RolesRepository {
@@ -20,12 +20,18 @@ final class RolesRepository {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.0.1
      *
      * @param string $roleName
      * @return Role|null
      */
     public final function getRole(string $roleName): ?Role {
-        return Role::where('name', $roleName)->first();
+        
+        return tenant()->run(function() use ($roleName) {
+
+            return Role::where('name', $roleName)->first();
+
+        });
+
     }
 }
