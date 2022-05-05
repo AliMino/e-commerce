@@ -2,51 +2,30 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Auth;
-use App\Exceptions\Api\ValidationException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use App\Exceptions\Api\{ ValidationException, UnauthorizedAccessException };
 
 /**
  * API Request.
  * 
  * @api
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 class ApiRequest extends FormRequest {
-
-    /**
-     * The names of the allowed user roles.
-     * 
-     * @since 1.0.0
-     * @var string[] ALLOWED_ROLES
-     */
-    protected const ALLOWED_ROLES = [];
-
-    /**
-     * Whether to allow anonymous users to access the requested resource, or not.
-     * 
-     * @since 1.0.0
-     * @var boolean ALLOWS_ANONYMOUS_USER
-     */
-    protected const ALLOWS_ANONYMOUS_USER = true;
 
     /**
      * Authorization rules for the request
      * 
      * @api
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      * 
      * @return boolean
      */
     public function authorize() {
-        if (is_null($user = Auth::user())) {
-            return static::ALLOWS_ANONYMOUS_USER;
-        }
-
-        return in_array($user->role->name, static::ALLOWED_ROLES);
+        return true;
     }
 
     /**
@@ -77,5 +56,20 @@ class ApiRequest extends FormRequest {
      */
     protected function failedValidation(Validator $validator) {
         throw new ValidationException($validator->errors()->messages());
+    }
+
+    /**
+     * Handle a failed authorization attempt.
+     * 
+     * @internal
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @return void
+     *
+     * @throws UnauthorizedAccessException
+     */
+    protected function failedAuthorization() {
+        throw new UnauthorizedAccessException();
     }
 }

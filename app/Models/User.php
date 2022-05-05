@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\{ Notifications\Notifiable, Foundation\Auth\User as Authenticatable };
-use Illuminate\Database\Eloquent\{ Factories\HasFactory, Relations\BelongsTo, Relations\HasOne };
+use Illuminate\Database\Eloquent\{ Factories\HasFactory, Relations\BelongsTo, Relations\HasMany };
 
 /**
  * The User Model.
  * 
  * @api
  * @final
- * @version 1.2.0
+ * @version 1.2.1
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class User extends Authenticatable {
@@ -64,17 +64,17 @@ final class User extends Authenticatable {
     }
 
     /**
-     * Retrieves the relation to the related Store instance (for merchants).
+     * Retrieves the relation to the related Stores instance (for merchants).
      * 
      * @api
      * @final
      * @since 1.2.0
-     * @version 1.0.0
+     * @version 1.0.1
      *
-     * @return HasOne
+     * @return HasMany
      */
-    public final function store(): HasOne {
-        return $this->hasOne(Store::class, 'merchant_id');
+    public final function stores(): HasMany {
+        return $this->hasMany(Store::class, 'merchant_id');
     }
 
     /**

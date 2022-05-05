@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,14 +15,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group([ 'prefix' => 'tenants'        ], __DIR__ . '/api/tenants.php');
+
+
+Route::middleware('tenant')->group(function() {
+    
+    // World-Wide Routes...
+    Route::group([ 'prefix' => 'merchants'  ], __DIR__ . '/api/merchants.php');
+    Route::group([ 'prefix' => 'consumers'  ], __DIR__ . '/api/consumers.php');
+    
+    // Protected Routes...
+    Route::middleware('auth:sanctum')->group(function() {
+
+        Route::group([ 'prefix' => 'stores'     ], __DIR__ . '/api/stores.php');
+
+    });
+
 });
-
-Route::group([ 'prefix' => 'tenants' ],                         __DIR__ . '/api/tenants.php');
-
-Route::group([ 'prefix' => 'merchants' ],                       __DIR__ . '/api/merchants.php');
-
-Route::group([ 'prefix' => 'consumers' ],                       __DIR__ . '/api/consumers.php');
-
-Route::group([ 'prefix' => 'users', 'middleware' => 'tenant' ], __DIR__ . '/api/users.php');

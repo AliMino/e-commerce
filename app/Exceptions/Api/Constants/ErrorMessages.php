@@ -7,7 +7,7 @@ namespace App\Exceptions\Api\Constants;
  * 
  * @api
  * @final
- * @version 1.3.0
+ * @version 1.4.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ErrorMessages {
@@ -19,6 +19,8 @@ final class ErrorMessages {
     private const UN_AUTHORIZED_ACCESS      = "Unauthorized access.";
     private const EMAIL_ALREADY_EXISTS      = "The provided email address already in use.";
     private const INVALID_USER_CREDENTIALS  = 'Either the specified email or password is/are wrong.';
+    private const STORE_NAME_ALREADY_EXISTS = "The provided store name already in use.";
+    private const STORE_NAME_DOESNOT_CHANGE = "New store name can't be the same as the old name.";
 
     public static final function unknownSubdomain(string $subdomain): string {
         return sprintf(self::UNKNWON_SUBDOMAIN, $subdomain);
@@ -46,5 +48,13 @@ final class ErrorMessages {
 
     public static final function invalidUserCredentials(): string {
         return self::INVALID_USER_CREDENTIALS;
+    }
+
+    public static final function storeNameAlreadyExists(): string {
+        return self::STORE_NAME_ALREADY_EXISTS;
+    }
+
+    public static final function storeNameDoesnotChange(): string {
+        return self::STORE_NAME_DOESNOT_CHANGE;
     }
 }
