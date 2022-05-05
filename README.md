@@ -56,13 +56,16 @@ the `details` field holds an extra details about the error - optionally provided
 
 ## Available Requests
 
-| Request Group | Request Name          | HTTP Method | URL                    | Allowed For |
-| ------------: | :-------------------- | ----------: | :--------------------- | :---------- |
-|     Merchants | Signup Merchant       |        POST | api/merchants/register | World       |
-|     Merchants | Authenticate Merchant |        POST | api/merchants/login    | World       |
-|     Consumers | Signup Consumer       |        POST | api/consumers/register | World       |
-|     Consumers | Authenticate Consumer |        POST | api/consumers/login    | World       |
-|        Stores | Update Store          |         PUT | api/stores/{storeId}   | Merchant    |
+| Request Group | Request Name          | HTTP Method | URL                           | Allowed For    |
+| ------------: | :-------------------- | ----------: | :---------------------------- | :------------- |
+|     Merchants | Signup Merchant       |        POST | api/merchants/register        | World          |
+|     Merchants | Authenticate Merchant |        POST | api/merchants/login           | World          |
+|     Consumers | Signup Consumer       |        POST | api/consumers/register        | World          |
+|     Consumers | Authenticate Consumer |        POST | api/consumers/login           | World          |
+|        Stores | Update Store          |         PUT | api/stores/{storeId}          | Merchant       |
+|      Products | Get All Products      |         GET | api/stores/{storeId}/products | World [^req_1] |
+|      Products | Create Product        |        POST | api/stores/{storeId}/products | Merchant       |
+|      Products | Update Product        |         PUT | api/stores/{storeId}/products | Merchant       |
 
 ---
 
@@ -71,9 +74,10 @@ the `details` field holds an extra details about the error - optionally provided
 ## Notes
 
 [^firstparty]: First-party packages are most-likely to be pre-installed with laravel.
+[^req_1]: Merchants allowed only for their stores.
 
 ---
 
 ---
 
-[Top](#e-commerce)
+[Top](#e-commerce) &emsp; - &emsp; [Response Structure](#response-structure) &emsp; - &emsp; [Available Requests](#available-requests)

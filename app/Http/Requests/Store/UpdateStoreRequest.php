@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Store;
 
 /**
- * Authentication Request.
+ * Update Store Request.
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
-final class AuthenticationRequest extends Base\ApiRequest {
+final class UpdateStoreRequest extends MerchantStoreRequest {
 
     /**
      * Gets the validation rules to be applied to inputs of this request.
@@ -25,8 +25,7 @@ final class AuthenticationRequest extends Base\ApiRequest {
      */
     public final function rules(): array {
         return [
-            'email'     => [ 'required', 'email'  ],
-            'password'  => [ 'required', 'string' ]
+            'new_name' => [ 'string', 'nullable' ]
         ];
     }
 }

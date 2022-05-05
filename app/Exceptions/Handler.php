@@ -6,7 +6,7 @@ use Throwable;
 use App\Services\GeneralService;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use App\Exceptions\Api\{ ApiException, UnknownSubdomainException, NoSubdomainProvidedException };
+use App\Exceptions\Api\{ ApiException, UnknownSubdomainException, NoSubdomainProvidedException, RouteNotFoundException };
 
 class Handler extends ExceptionHandler
 {
@@ -57,7 +57,11 @@ class Handler extends ExceptionHandler
         if ($e instanceof \Stancl\Tenancy\Exceptions\NotASubdomainException) {
             throw new NoSubdomainProvidedException();
         }
-     
+
+        if ($e instanceof \Symfony\Component\Routing\Exception\RouteNotFoundException) {
+            throw new RouteNotFoundException(preg_replace([ '/^\w+ \[/', '/\].*$/' ], '', $e->getMessage()));
+        }
+
         throw new ApiException($e->getMessage(), 0, Response::HTTP_INTERNAL_SERVER_ERROR, [], $e);
     }
 }

@@ -9,7 +9,7 @@ namespace App\Http\Requests;
  * @version 1.0.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
-class CreateUserRequest extends ApiRequest {
+class CreateUserRequest extends Base\ApiRequest {
 
     /**
      * Gets the validation rules to be applied to inputs of this request.

@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Store\Product;
 
+use App\Constants\Roles;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Store\MerchantStoreRequest;
 
 /**
- * Update Store Request.
+ * Get Products Request.
  * 
  * @api
  * @final
  * @version 1.0.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
-final class UpdateStoreRequest extends MerchantRequest {
+final class GetProductsRequest extends MerchantStoreRequest {
 
     /**
      * Authorization rules for the request
@@ -26,7 +28,7 @@ final class UpdateStoreRequest extends MerchantRequest {
      * @return boolean
      */
     public final function authorize() {
-        return parent::authorize() && $this->isMerchantAuthorizedForStore(Auth::user(), request()->route('storeId'));
+        return Roles::CONSUMER == Auth::user()->role->name || parent::authorize();
     }
 
     /**
@@ -42,7 +44,7 @@ final class UpdateStoreRequest extends MerchantRequest {
      */
     public final function rules(): array {
         return [
-            'new_name' => [ 'string', 'nullable' ]
+            'having_quantity_more_than' => [ 'integer', 'min:0' ]
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Base;
 
 use App\Models\User;
 use App\Constants\Roles;

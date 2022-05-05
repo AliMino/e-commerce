@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\StoreService;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\UpdateStoreRequest;
+use App\Http\Requests\Store\UpdateStoreRequest;
 
 /**
  * Store Controller.

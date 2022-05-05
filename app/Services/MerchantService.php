@@ -11,7 +11,7 @@ use App\Repositories\UsersRepository;
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.1.1
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class MerchantService extends UserService {
@@ -52,7 +52,7 @@ final class MerchantService extends UserService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.0.1
      *
      * @param string $name
      * @param string $email
@@ -66,7 +66,7 @@ final class MerchantService extends UserService {
 
         $this->storeService->createStore($storeName, $merchant);
 
-        return $merchant->load('store');
+        return $merchant->load('stores');
         
     }
 

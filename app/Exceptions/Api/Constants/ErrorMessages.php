@@ -7,7 +7,7 @@ namespace App\Exceptions\Api\Constants;
  * 
  * @api
  * @final
- * @version 1.4.0
+ * @version 1.5.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ErrorMessages {
@@ -21,6 +21,8 @@ final class ErrorMessages {
     private const INVALID_USER_CREDENTIALS  = 'Either the specified email or password is/are wrong.';
     private const STORE_NAME_ALREADY_EXISTS = "The provided store name already in use.";
     private const STORE_NAME_DOESNOT_CHANGE = "New store name can't be the same as the old name.";
+    private const ROUTE_NOT_FOUND           = "Route `%s` doesn't exist.";
+    private const SUBDOMAIN_NOT_FOUND       = "Subdomain `%s` doesn't exist.";
 
     public static final function unknownSubdomain(string $subdomain): string {
         return sprintf(self::UNKNWON_SUBDOMAIN, $subdomain);
@@ -56,5 +58,13 @@ final class ErrorMessages {
 
     public static final function storeNameDoesnotChange(): string {
         return self::STORE_NAME_DOESNOT_CHANGE;
+    }
+
+    public static final function routeNotFound(string $routeName): string {
+        return sprintf(self::ROUTE_NOT_FOUND, $routeName);
+    }
+
+    public static final function subDomainNotFound(string $subDomain): string {
+        return sprintf(self::SUBDOMAIN_NOT_FOUND, $subDomain);
     }
 }
