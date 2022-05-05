@@ -2,19 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\{ Notifications\Notifiable, Foundation\Auth\User as Authenticatable };
+use Illuminate\Database\Eloquent\{ Factories\HasFactory, Relations\BelongsTo, Relations\HasOne };
 
 /**
  * The User Model.
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class User extends Authenticatable {
@@ -30,6 +27,7 @@ final class User extends Authenticatable {
         'name',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -63,6 +61,20 @@ final class User extends Authenticatable {
      */
     public final function role(): BelongsTo {
         return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Retrieves the relation to the related Store instance (for merchants).
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @return HasOne
+     */
+    public final function store(): HasOne {
+        return $this->hasOne(Store::class, 'merchant_id');
     }
 
     /**

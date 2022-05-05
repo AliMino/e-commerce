@@ -3,15 +3,16 @@
 namespace Database\Seeders;
 
 use Faker\Generator;
+use App\Constants\Roles;
 use Illuminate\Database\Seeder;
-use App\Models\{ Role, Tenant, User };
+use App\Models\{ Role, Store, Tenant, User };
 
 /**
  * Database Seeder.
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class DatabaseSeeder extends Seeder {
@@ -35,6 +36,17 @@ final class DatabaseSeeder extends Seeder {
         }
     }
 
+    /**
+     * Seeds a new tenant.
+     * 
+     * @internal
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param string $plan
+     * @param string ...$domains
+     * @return \App\Models\Tenant
+     */
     private function seedTenant(string $plan, string ...$domains): Tenant {
         $this->call(TenantSeeder::class, false, compact('plan', 'domains'));
 
@@ -47,6 +59,17 @@ final class DatabaseSeeder extends Seeder {
         return $tenant;
     }
 
+    /**
+     * Seeds a new user-role for the specified tenant.
+     * 
+     * @internal
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param Tenant $tenant
+     * @param string $roleName
+     * @return Role
+     */
     private function seedRole(Tenant $tenant, string $roleName): Role {
         $this->call(RoleSeeder::class, false, [ 'tenant' => $tenant, 'name' => $roleName ]);
 
@@ -59,6 +82,17 @@ final class DatabaseSeeder extends Seeder {
         return $role;
     }
 
+    /**
+     * Seeds a new user.
+     * 
+     * @internal
+     * @since 1.0.0
+     * @version 1.1.0
+     *
+     * @param Tenant $tenant
+     * @param Role $role
+     * @return User
+     */
     private function seedUser(Tenant $tenant, Role $role): User {
         $this->call(UserSeeder::class, false, [
             'tenant'    => $tenant,
@@ -68,6 +102,34 @@ final class DatabaseSeeder extends Seeder {
             'role'      => $role
         ]);
 
-        return $tenant->run(fn() => User::orderBy('id', 'desc')->first());
+        $user = $tenant->run(fn() => User::orderBy('id', 'desc')->first());
+
+        if (Roles::MERCHANT == $role->name) {
+            $this->seedStore($tenant, $this->faker->streetName, $user);
+        }
+
+        return $user;
+    }
+
+    /**
+     * Seeds a new store.
+     * 
+     * @internal
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @param Tenant $tenant
+     * @param string $storeName
+     * @param User $merchant
+     * @return Store
+     */
+    private function seedStore(Tenant $tenant, string $storeName, User $merchant): Store {
+        $this->call(StoreSeeder::class, false, [
+            'tenant'   => $tenant,
+            'name'     => $storeName,
+            'merchant' => $merchant
+        ]);
+
+        return $tenant->run(fn() => Store::orderBy('id', 'desc')->first());;
     }
 }
