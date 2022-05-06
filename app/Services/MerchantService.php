@@ -11,7 +11,7 @@ use App\Repositories\UsersRepository;
  * 
  * @api
  * @final
- * @version 1.1.1
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class MerchantService extends UserService {
@@ -52,19 +52,20 @@ final class MerchantService extends UserService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.1
+     * @version 2.0.0
      *
      * @param string $name
      * @param string $email
      * @param string $password
      * @param string $storeName
+     * @param float|null $storeVatPercentage
      * @return User
      */
-    public final function createMerchant(string $name, string $email, string $password, string $storeName): User {
+    public final function createMerchant(string $name, string $email, string $password, string $storeName, ?float $storeVatPercentage): User {
         
         $merchant = $this->createUser($name, $email, $password, Roles::MERCHANT);
 
-        $this->storeService->createStore($storeName, $merchant);
+        $this->storeService->createStore($storeName, $merchant, $storeVatPercentage);
 
         return $merchant->load('stores');
         

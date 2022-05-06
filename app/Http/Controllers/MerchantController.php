@@ -11,7 +11,7 @@ use App\Http\Requests\{ AuthenticationRequest, CreateMerchantRequest };
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class MerchantController extends ApiController {
@@ -44,7 +44,7 @@ final class MerchantController extends ApiController {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param CreateMerchantRequest $request
      * @return JsonResponse
@@ -55,7 +55,8 @@ final class MerchantController extends ApiController {
                 $request->input('name'),
                 $request->input('email'),
                 $request->input('password'),
-                $request->input('store_name')
+                $request->input('store_name'),
+                $request->input('store_vat_percentage')
             )
         );
     }

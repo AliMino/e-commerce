@@ -7,7 +7,7 @@ namespace App\Http\Requests\Store;
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class UpdateStoreRequest extends MerchantStoreRequest {
@@ -19,13 +19,14 @@ final class UpdateStoreRequest extends MerchantStoreRequest {
      * @final
      * @override
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @return string[][]
      */
     public final function rules(): array {
         return [
-            'new_name' => [ 'string', 'nullable' ]
+            'new_name'       => [ 'string', 'nullable' ],
+            'vat_percentage' => [ 'numeric', 'min:0', 'max:1', 'nullable' ],
         ];
     }
 }

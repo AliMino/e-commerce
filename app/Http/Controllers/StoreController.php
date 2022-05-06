@@ -11,7 +11,7 @@ use App\Http\Requests\Store\UpdateStoreRequest;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class StoreController extends ApiController {
@@ -44,7 +44,7 @@ final class StoreController extends ApiController {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param UpdateStoreRequest $request
      * @param integer $storeId
@@ -54,7 +54,8 @@ final class StoreController extends ApiController {
         return $this->getSuccessResponse(
             $this->storeService->updateStore(
                 $storeId,
-                $request->input('new_name')
+                $request->input('new_name'),
+                $request->input('vat_percentage')
             )
         );
     }

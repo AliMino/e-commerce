@@ -7,7 +7,7 @@ namespace App\Http\Requests;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class CreateMerchantRequest extends CreateUserRequest {
@@ -19,13 +19,14 @@ final class CreateMerchantRequest extends CreateUserRequest {
      * @final
      * @override
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @return string[][]
      */
     public final function rules(): array {
         return array_merge(parent::rules(), [
-            'store_name' => [ 'required', 'string', 'unique:stores,name' ]
+            'store_name'            => [ 'required', 'string', 'unique:stores,name' ],
+            'store_vat_percentage'  => [ 'numeric', 'min:0', 'max:1', 'nullable' ]
         ]);
     }
 }

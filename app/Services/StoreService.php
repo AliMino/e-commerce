@@ -13,7 +13,7 @@ use App\Exceptions\Api\{
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class StoreService {
@@ -44,16 +44,17 @@ final class StoreService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.1.0
+     * @version 2.0.0
      *
      * @param string $name
      * @param User $merchant
+     * @param float|null $vatPercentage
      * @return Store
      * 
      * @throws UnauthorizedAccessException
      * @throws StoreNameAlreadyExistsException
      */
-    public final function createStore(string $name, User $merchant): Store {
+    public final function createStore(string $name, User $merchant, ?float $vatPercentage = null): Store {
         // Since both consumers and merchants live happily together
         // in the same database table - named `users` actually; we have
         // to manually check if who is claiming to be a merchant really is.
@@ -63,7 +64,7 @@ final class StoreService {
 
         $this->assertStoreNameUniqueness($name);
 
-        return $this->storesRepository->createStore($name, $merchant->id);
+        return $this->storesRepository->createStore($name, $merchant->id, $vatPercentage);
     }
 
     /**
@@ -72,15 +73,16 @@ final class StoreService {
      * @api
      * @final
      * @since 1.1.0
-     * @version 1.0.0
+     * @version 2.0.0
      *
      * @param integer $storeId
      * @param string|null $newName
+     * @param float|null $vatPercentage
      * @return Store
      * 
      * @throws StoreNameDoesNotChangeException
      */
-    public final function updateStore(int $storeId, ?string $newName): Store {
+    public final function updateStore(int $storeId, ?string $newName, ?float $vatPercentage): Store {
         $store = $this->getStoreById($storeId);
 
         if (!is_null($newName)) {
@@ -91,7 +93,7 @@ final class StoreService {
             $this->assertStoreNameUniqueness($newName);
         }
 
-        return $this->storesRepository->updateStore($storeId, $newName);
+        return $this->storesRepository->updateStore($storeId, $newName, $vatPercentage);
     }
 
     /**

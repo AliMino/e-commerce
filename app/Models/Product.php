@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\{ Model };
+use Illuminate\Database\Eloquent\{ Model, Relations\BelongsTo };
 
 /**
  * The Product Model.
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class Product extends Model {
@@ -28,4 +28,18 @@ final class Product extends Model {
         'current_quantity',
         'store_id'
     ];
+
+    /**
+     * Gets the relation to the store having this product.
+     * 
+     * @api
+     * @final
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @return BelongsTo
+     */
+    public final function store(): BelongsTo {
+        return $this->belongsTo(Store::class);
+    }
 }

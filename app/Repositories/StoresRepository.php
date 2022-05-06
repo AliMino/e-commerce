@@ -9,7 +9,7 @@ use App\Models\Store;
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class StoresRepository {
@@ -20,17 +20,18 @@ final class StoresRepository {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.1
+     * @version 2.0.0
      *
      * @param string $name
      * @param integer $merchant_id
+     * @param float|null $vat_percentage
      * @return Store
      */
-    public final function createStore(string $name, int $merchant_id): Store {
+    public final function createStore(string $name, int $merchant_id, ?float $vat_percentage): Store {
         
-        return tenant()->run(function() use ($name, $merchant_id) {
+        return tenant()->run(function() use ($name, $merchant_id, $vat_percentage) {
         
-            return Store::create(compact('name', 'merchant_id'));
+            return Store::create(compact('name', 'merchant_id', 'vat_percentage'));
         
         });
 
@@ -84,20 +85,25 @@ final class StoresRepository {
      * @api
      * @final
      * @since 1.1.0
-     * @version 1.0.0
+     * @version 2.0.0
      *
      * @param integer $store_id
      * @param string|null $name
+     * @param float|null $vat_percentage
      * @return Store
      */
-    public final function updateStore(int $store_id, ?string $name = null): Store {
+    public final function updateStore(int $store_id, ?string $name, ?float $vat_percentage): Store {
         
-        return tenant()->run(function() use ($store_id, $name) {
+        return tenant()->run(function() use ($store_id, $name, $vat_percentage) {
 
             $store = Store::find($store_id);
 
             if (!is_null($name)) {
                 $store->name = $name;
+            }
+
+            if (!is_null($vat_percentage)) {
+                $store->vat_percentage = $vat_percentage;
             }
 
             $store->save();
