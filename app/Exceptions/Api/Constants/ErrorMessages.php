@@ -7,22 +7,23 @@ namespace App\Exceptions\Api\Constants;
  * 
  * @api
  * @final
- * @version 1.5.0
+ * @version 1.6.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ErrorMessages {
 
-    private const UNKNWON_SUBDOMAIN         = 'Unknown subdomain `%s`.';
-    private const NO_SUBDOMAIN_PROVIDED     = 'No subdomain provided.';
-    private const INVALID_INPUTS            = 'Invalid inputs.';
-    private const ENTITY_NOT_FOUND          = "Entity `%s(%s)` doesn't exists.";
-    private const UN_AUTHORIZED_ACCESS      = "Unauthorized access.";
-    private const EMAIL_ALREADY_EXISTS      = "The provided email address already in use.";
-    private const INVALID_USER_CREDENTIALS  = 'Either the specified email or password is/are wrong.';
-    private const STORE_NAME_ALREADY_EXISTS = "The provided store name already in use.";
-    private const STORE_NAME_DOESNOT_CHANGE = "New store name can't be the same as the old name.";
-    private const ROUTE_NOT_FOUND           = "Route `%s` doesn't exist.";
-    private const SUBDOMAIN_NOT_FOUND       = "Subdomain `%s` doesn't exist.";
+    private const UNKNWON_SUBDOMAIN             = 'Unknown subdomain `%s`.';
+    private const NO_SUBDOMAIN_PROVIDED         = 'No subdomain provided.';
+    private const INVALID_INPUTS                = 'Invalid inputs.';
+    private const ENTITY_NOT_FOUND              = "Entity `%s(%s)` doesn't exists.";
+    private const UN_AUTHORIZED_ACCESS          = "Unauthorized access.";
+    private const EMAIL_ALREADY_EXISTS          = "The provided email address already in use.";
+    private const INVALID_USER_CREDENTIALS      = 'Either the specified email or password is/are wrong.';
+    private const STORE_NAME_ALREADY_EXISTS     = "The provided store name already in use.";
+    private const STORE_NAME_DOESNOT_CHANGE     = "New store name can't be the same as the old name.";
+    private const ROUTE_NOT_FOUND               = "Route `%s` doesn't exist.";
+    private const SUBDOMAIN_NOT_FOUND           = "Subdomain `%s` doesn't exist.";
+    private const PRODUCT_NAME_ALREADY_EXISTS   = "This store already has the product `%s`.";
 
     public static final function unknownSubdomain(string $subdomain): string {
         return sprintf(self::UNKNWON_SUBDOMAIN, $subdomain);
@@ -66,5 +67,9 @@ final class ErrorMessages {
 
     public static final function subDomainNotFound(string $subDomain): string {
         return sprintf(self::SUBDOMAIN_NOT_FOUND, $subDomain);
+    }
+
+    public static final function productNameAlreadyExists(string $productName): string {
+        return sprintf(self::PRODUCT_NAME_ALREADY_EXISTS, $productName);
     }
 }

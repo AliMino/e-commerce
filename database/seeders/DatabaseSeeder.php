@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Faker\Generator;
-use App\Constants\Roles;
 use Illuminate\Database\Seeder;
+use App\Constants\{ Languages, Roles };
 use App\Models\{ Role, Store, Tenant, User };
 
 /**
@@ -12,7 +12,7 @@ use App\Models\{ Role, Store, Tenant, User };
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class DatabaseSeeder extends Seeder {
@@ -41,7 +41,7 @@ final class DatabaseSeeder extends Seeder {
      * 
      * @internal
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param string $plan
      * @param string ...$domains
@@ -56,7 +56,28 @@ final class DatabaseSeeder extends Seeder {
             $this->seedRole($tenant, $userRoleName);
         }
 
+        $this->seedLanguages($tenant);
+
         return $tenant;
+    }
+
+    /**
+     * Seeds the pre-specified languages to the specified tenant.
+     * 
+     * @internal
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param Tenant $tenant
+     * @return void
+     */
+    private function seedLanguages(Tenant $tenant): void {
+
+        foreach (Languages::ALL as $code => $name) {
+
+            $this->call(LanguageSeeder::class, false, compact('tenant', 'name', 'code'));
+
+        }
     }
 
     /**

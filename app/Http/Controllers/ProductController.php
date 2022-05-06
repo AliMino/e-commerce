@@ -11,7 +11,7 @@ use App\Http\Requests\Store\Product\{ CreateProductRequest, GetProductsRequest, 
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductController extends ApiController {
@@ -44,7 +44,7 @@ final class ProductController extends ApiController {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param GetProductsRequest $request
      * @param integer $storeId
@@ -54,7 +54,8 @@ final class ProductController extends ApiController {
         return $this->getSuccessResponse(
             $this->productService->getProducts(
                 $storeId,
-                $request->input('having_quantity_more_than')
+                $request->input('having_quantity_more_than'),
+                $request->input('with_details', false)
             )
         );
     }
@@ -65,7 +66,7 @@ final class ProductController extends ApiController {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param CreateProductRequest $request
      * @param integer $storeId
@@ -75,9 +76,11 @@ final class ProductController extends ApiController {
         return $this->getSuccessResponse(
             $this->productService->createProduct(
                 $storeId,
-                $request->input('name'),
-                $request->input('description'),
-                $request->input('price'),
+                $request->input('details.name'),
+                $request->input('details.description'),
+                $request->input('details.price'),
+                $request->input('details.language_id'),
+                $request->input('details.currency'),
                 $request->input('vat_included'),
                 $request->input('quantity')
             )

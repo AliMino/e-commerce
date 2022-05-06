@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\{ Model, Relations\BelongsTo };
+use Illuminate\Database\Eloquent\{ Model, Relations\BelongsTo, Relations\HasMany };
 
 /**
  * The Product Model.
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class Product extends Model {
@@ -21,9 +21,6 @@ final class Product extends Model {
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'description',
-        'price',
         'vat_included',
         'current_quantity',
         'store_id'
@@ -41,5 +38,19 @@ final class Product extends Model {
      */
     public final function store(): BelongsTo {
         return $this->belongsTo(Store::class);
+    }
+
+    /**
+     * Gets the relation to the prodect details.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @return HasMany
+     */
+    public final function details(): HasMany {
+        return $this->hasMany(ProductDetail::class);
     }
 }

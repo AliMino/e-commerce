@@ -11,7 +11,7 @@ use App\Http\Requests\Store\MerchantStoreRequest;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class GetProductsRequest extends MerchantStoreRequest {
@@ -38,13 +38,14 @@ final class GetProductsRequest extends MerchantStoreRequest {
      * @final
      * @override
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @return string[][]
      */
     public final function rules(): array {
         return [
-            'having_quantity_more_than' => [ 'integer', 'min:0' ]
+            'having_quantity_more_than' => [ 'integer', 'min:0' ],
+            'with_details'              => [ 'boolean' ]
         ];
     }
 }

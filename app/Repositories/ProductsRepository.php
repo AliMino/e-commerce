@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductsRepository {
@@ -52,21 +52,18 @@ final class ProductsRepository {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 2.0.0
      *
      * @param integer $store_id
-     * @param string $name
-     * @param string|null $description
-     * @param float $price
      * @param boolean $vat_included
      * @param integer $current_quantity
      * @return Product
      */
-    public final function createProduct(int $store_id, string $name, ?string $description, float $price, bool $vat_included, int $current_quantity): Product {
+    public final function createProduct(int $store_id, bool $vat_included, int $current_quantity): Product {
 
-        return tenant()->run(function() use ($store_id, $name, $description, $price, $vat_included, $current_quantity) {
+        return tenant()->run(function() use ($store_id, $vat_included, $current_quantity) {
             
-            return Product::create(compact('store_id', 'name', 'description', 'price', 'vat_included', 'current_quantity'));
+            return Product::create(compact('store_id', 'vat_included', 'current_quantity'));
 
         });
 
@@ -99,33 +96,18 @@ final class ProductsRepository {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 2.0.0
      *
      * @param integer $product_id
-     * @param string|null $name
-     * @param string|null $description
-     * @param float|null $price
      * @param boolean|null $vat_included
      * @param integer|null $current_quantity
      * @return Product
      */
-    public final function updateProduct(int $product_id, ?string $name, ?string $description, ?float $price, ?bool $vat_included, ?int $current_quantity): Product {
+    public final function updateProduct(int $product_id, ?bool $vat_included, ?int $current_quantity): Product {
 
-        return tenant()->run(function() use ($product_id, $name, $description, $price, $vat_included, $current_quantity) {
+        return tenant()->run(function() use ($product_id, $vat_included, $current_quantity) {
             
             $product = Product::find($product_id);
-
-            if (!is_null($name)) {
-                $product->name = $name;
-            }
-
-            if (!is_null($description)) {
-                $product->description = $description;
-            }
-
-            if (!is_null($price)) {
-                $product->price = $price;
-            }
 
             if (!is_null($vat_included)) {
                 $product->vat_included = $vat_included;
@@ -138,6 +120,27 @@ final class ProductsRepository {
             $product->save();
 
             return $product;
+
+        });
+
+    }
+
+    /**
+     * Deletes the product specified by the provided product ID.
+     * 
+     * @api
+     * @final
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @param integer $product_id
+     * @return boolean
+     */
+    public final function deleteProduct(int $product_id): bool {
+
+        return tenant()->run(function() use ($product_id) {
+
+            return Product::destroy($product_id);
 
         });
 
