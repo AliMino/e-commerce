@@ -10,7 +10,7 @@ use App\Constants\Roles;
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ConsumerService extends UserService {
@@ -49,5 +49,20 @@ final class ConsumerService extends UserService {
      */
     public final function authenticateConsumer(string $email, string $password): string {
         return $this->authenticateUser($email, $password, Roles::CONSUMER);
+    }
+
+    /**
+     * Gets the consumer specified by the provided consumer ID.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param integer $consumerId
+     * @return User
+     */
+    public final function getConsumer(int $consumerId): User {
+        return $this->getUser($consumerId, Roles::CONSUMER);
     }
 }

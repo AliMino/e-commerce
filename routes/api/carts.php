@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Products Routes.
+ * Carts Routes.
  * 
  * @internal
  * @version 1.0.0
@@ -16,13 +16,8 @@ use Illuminate\Support\Facades\Route;
 // **** Applied Middlewares: tenant & auth:sanctum. ****
 // *****************************************************
 
-Route::get('', [  'uses' => ProductController::class . '@getStoreProducts' ]);
+Route::get('', 'getCart');
 
-Route::post('', [ 'uses' => ProductController::class . '@createStoreProduct' ]);
+Route::post('add', 'addToCart');
 
-route::group([ 'prefix' => '{productId}' ], function() {
-
-    Route::put('', [ 'uses' => ProductController::class . '@updateStoreProduct' ]);
-
-});
-
+Route::post('remove', 'removeFromCart');

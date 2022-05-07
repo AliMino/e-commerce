@@ -9,7 +9,7 @@ use App\Models\User;
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class UsersRepository {
@@ -54,6 +54,27 @@ final class UsersRepository {
         return tenant()->run(function() use ($email) {
         
             return User::where('email', $email)->first();
+
+        });
+
+    }
+
+    /**
+     * Finds a user with their ID.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param integer $userId
+     * @return User|null
+     */
+    public final function findUser(int $userId): ?User {
+
+        return tenant()->run(function() use ($userId): ?User {
+
+            return User::find($userId);
 
         });
 

@@ -7,7 +7,7 @@ namespace App\Exceptions\Api\Constants;
  * 
  * @api
  * @final
- * @version 1.6.0
+ * @version 1.7.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ErrorMessages {
@@ -24,6 +24,10 @@ final class ErrorMessages {
     private const ROUTE_NOT_FOUND               = "Route `%s` doesn't exist.";
     private const SUBDOMAIN_NOT_FOUND           = "Subdomain `%s` doesn't exist.";
     private const PRODUCT_NAME_ALREADY_EXISTS   = "This store already has the product `%s`.";
+    private const PRODUCT_NOT_FOUND             = "The specified product(s) do(es)not exist(s).";
+    private const INVALID_CART_QUANTITY         = "Cart quantities must be positive non-zero integers.";
+    private const INSUFFICIENT_PRODUCTS         = "The required amount of the selected product(s) is not available right now.";
+    private const INSUFFICIENT_CART_PRODUCTS    = "There're no enough products in cart.";
 
     public static final function unknownSubdomain(string $subdomain): string {
         return sprintf(self::UNKNWON_SUBDOMAIN, $subdomain);
@@ -71,5 +75,21 @@ final class ErrorMessages {
 
     public static final function productNameAlreadyExists(string $productName): string {
         return sprintf(self::PRODUCT_NAME_ALREADY_EXISTS, $productName);
+    }
+
+    public static final function productNotFound(): string {
+        return self::PRODUCT_NOT_FOUND;
+    }
+
+    public static final function invalidCartQuantity(): string {
+        return self::INVALID_CART_QUANTITY;
+    }
+
+    public static final function insufficientProducts(): string {
+        return self::INSUFFICIENT_PRODUCTS;
+    }
+
+    public static final function insufficientCartProducts(): string {
+        return self::INSUFFICIENT_CART_PRODUCTS;
     }
 }

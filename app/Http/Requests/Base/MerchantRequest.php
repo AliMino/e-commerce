@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
  * Merchant API Request.
  * 
  * @api
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 class MerchantRequest extends ApiRequest {
@@ -21,21 +21,12 @@ class MerchantRequest extends ApiRequest {
      * @api
      * @override
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      * 
      * @return boolean
      */
     public function authorize() {
-    
-        if (is_null($user = Auth::user())) {
-            return false;
-        }
-
-        if (Roles::MERCHANT != $user->role->name) {
-            return false;
-        }
-
-        return true;
+        return ! is_null($user = Auth::user()) && Roles::MERCHANT == $user->role->name;
     }
 
     /**

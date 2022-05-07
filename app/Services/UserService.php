@@ -10,7 +10,7 @@ use App\Exceptions\Api\{ EntityNotFoundException, InvalidUserCredentialsExceptio
  * User Business Service.
  * 
  * @api
- * @version 1.2.0
+ * @version 1.3.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 class UserService {
@@ -113,5 +113,31 @@ class UserService {
         }
 
         return $user->createToken('auth-token')->plainTextToken;
+    }
+
+    /**
+     * Get the user specified by the specified user ID and role.
+     * 
+     * @final
+     * @internal
+     * @since 1.3.0
+     * @version 1.0.0
+     *
+     * @param integer $userId
+     * @param string $roleName
+     * @return User
+     * 
+     * @throws EntityNotFoundException
+     */
+    protected final function getUser(int $userId, string $roleName): User {
+        if (is_null($user = $this->usersRepository->findUser($userId))) {
+            throw new EntityNotFoundException("User($roleName)", $userId);
+        }
+
+        if ($roleName != $user->role->name) {
+            throw new EntityNotFoundException("User($roleName)", $userId);
+        }
+
+        return $user;
     }
 }

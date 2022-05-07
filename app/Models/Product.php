@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\{ Model, Relations\BelongsTo, Relations\HasMany };
+use Illuminate\Database\Eloquent\{ Collection, Model, Relations\BelongsTo, Relations\HasMany };
 
 /**
  * The Product Model.
@@ -11,6 +11,13 @@ use Illuminate\Database\Eloquent\{ Model, Relations\BelongsTo, Relations\HasMany
  * @final
  * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
+ * 
+ * @property integer $id
+ * @property boolean $vat_included
+ * @property integer $current_quantity
+ * @property integer $store_id
+ * @property Store $store
+ * @property Collection $details
  */
 final class Product extends Model {
 

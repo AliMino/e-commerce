@@ -5,14 +5,14 @@ namespace App\Services;
 use App\Models\Product;
 use App\Repositories\ProductsRepository;
 use Illuminate\Support\{ Collection, Facades\DB };
-use App\Exceptions\Api\{ EntityNotFoundException, UnauthorizedAccessException };
+use App\Exceptions\Api\{ EntityNotFoundException, InsufficientProductsException, ProductNotFoundException, UnauthorizedAccessException };
 
 /**
  * Product Business Service.
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductService {
@@ -177,5 +177,58 @@ final class ProductService {
         $this->getProductById($productId);
 
         return $this->productsRepository->deleteProduct($productId);
+    }
+
+    /**
+     * Asserts that the products specified by the provided products IDs are all exist.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param integer ...$productsIds
+     * @return void
+     */
+    public final function assertProductsExistence(int ...$productsIds): void {
+        if (count($productsIds) != $this->productsRepository->getProductsCount($productsIds)) {
+            throw new ProductNotFoundException();
+        }
+    }
+
+    /**
+     * Asserts that the specified products' quantities are available.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param integer[] $productsQuantities
+     * @param boolean $lockForUpdate
+     * @return void
+     */
+    public final function assertProductsQuantitiesAvailability(array $productsQuantities, bool $lockForUpdate = true): void {
+        if (count(array_unique(array_column($productsQuantities, 'product_id')))
+            > $this->productsRepository->getSufficientProductsCount($productsQuantities, $lockForUpdate)) {
+            throw new InsufficientProductsException();
+        }
+    }
+
+    /**
+     * Deduct the specified products quantities from the available stock.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param integer[][] $productsQuantities
+     * @return void
+     */
+    public final function deductProductsQuantities(array $productsQuantities): void {
+        foreach ($productsQuantities as $productQuantity) {
+            $this->productsRepository->deductProductQuantity($productQuantity[ 'product_id' ], $productQuantity[ 'quantity' ]);
+        }
     }
 }

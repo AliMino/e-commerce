@@ -3,14 +3,14 @@
 namespace App\Repositories;
 
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\{ Builder, Collection };
 
 /**
  * Products Database Repository.
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductsRepository {
@@ -144,5 +144,90 @@ final class ProductsRepository {
 
         });
 
+    }
+
+    /**
+     * Retrieves the number of products having any of the specified IDs.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param integer[]|null $idsIn
+     * @return integer
+     */
+    public final function getProductsCount(?array $idsIn): int {
+
+        return tenant()->run(function() use ($idsIn): int {
+
+            $productsQuery = Product::query();
+
+            if (!is_null($idsIn)) {
+                $productsQuery->whereIn('id', $idsIn);
+            }
+
+            return $productsQuery->count();
+
+        });
+
+    }
+
+    /**
+     * Retrieves the number of products that available with the required quantities.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param integer[][] $productsQuantities
+     * @param boolean $lockForUpdate
+     * @return integer
+     */
+    public final function getSufficientProductsCount(array $productsQuantities, bool $lockForUpdate = true): int {
+
+        return tenant()->run(function() use ($productsQuantities, $lockForUpdate) {
+
+            /** @var Builder $productsQuery */
+            $productsQuery = $lockForUpdate ? Product::lockForUpdate() : Product::query();
+
+            foreach ($productsQuantities as $productQuantity) {
+                
+                $productsQuery->orWhere(function(Builder $productQuery) use ($productQuantity) {
+
+                    $productQuery->where('id', $productQuantity[ 'product_id' ])
+                                 ->where('current_quantity', '>=', $productQuantity[ 'quantity' ]);
+
+                });
+            }
+
+            return $productsQuery->count();
+
+        });
+
+    }
+
+    /**
+     * Deducts the specified quantity from the specified product's stock.
+     * 
+     * @api
+     * @final
+     * @since 1.2.0
+     * @version 1.0.0
+     *
+     * @param integer $productId
+     * @param integer $quantity
+     * @return void
+     */
+    public final function deductProductQuantity(int $productId, int $quantity): void {
+
+        tenant()->run(function() use ($productId, $quantity) {
+
+            $product = $this->findProduct($productId);
+            $product->current_quantity -= $quantity;
+            $product->save();
+
+        });
     }
 }
