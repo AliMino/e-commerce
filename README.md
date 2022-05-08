@@ -85,6 +85,9 @@ For full requests & response reference, see [schema](docs/schema.md).
 
 ## Available Requests
 
+**If you are using Postman to discover this API, you may need [this](docs/E-Commerce.postman_collection.json)**
+</br></br>
+
 |                                 Request Group | Request Name                                                  | HTTP Method | URL                           | Allowed For    |
 | --------------------------------------------: | :------------------------------------------------------------ | ----------: | :---------------------------- | :------------- |
 | [Merchants](docs/schema.md#merchant-requests) | [Signup Merchant](docs/schema.md#sign-up-merchant)            |        POST | api/merchants/register        | World          |
@@ -103,7 +106,6 @@ For full requests & response reference, see [schema](docs/schema.md).
 ## Known Issues
 
 - All tenants databases are hosted together.
-- Stateful (Session-based) authentication is used.
 
 [^req_1]: Merchants allowed only for their stores.
 

@@ -1,0 +1,676 @@
+{
+	"info": {
+		"_postman_id": "b73b404b-b4b1-4bfa-a9a0-cf8b01b6356f",
+		"name": "E-Commerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Merchants",
+			"item": [
+				{
+					"name": "Signup Merchant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Ali",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "user1@merchants",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "store_name",
+									"value": "store_1",
+									"type": "text"
+								},
+								{
+									"key": "store_vat_percentage",
+									"value": "0.14",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{subdomain}}.{{host}}/api/merchants/register",
+							"host": [
+								"{{subdomain}}",
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"merchants",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate Merchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (200 == responseCode.code) {",
+									"    var response = JSON.parse(responseBody);",
+									"    if (response.status) {",
+									"        pm.collectionVariables.set(\"merchant.token\", response.data);",
+									"    }",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "{{merchant.email}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{merchant.password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{subdomain}}.{{host}}/api/merchants/login",
+							"host": [
+								"{{subdomain}}",
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"merchants",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Consumers",
+			"item": [
+				{
+					"name": "Signup Consumer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "user1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "user1@consumers",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{subdomain}}.{{host}}/api/consumers/register",
+							"host": [
+								"{{subdomain}}",
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"consumers",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate Consumer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (200 == responseCode.code) {",
+									"    var response = JSON.parse(responseBody);",
+									"    if (response.status) {",
+									"        pm.collectionVariables.set(\"consumer.token\", response.data);",
+									"    }",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "{{consumer.email}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{consumer.password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{subdomain}}.{{host}}/api/consumers/login",
+							"host": [
+								"{{subdomain}}",
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"consumers",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stores",
+			"item": [
+				{
+					"name": "Products",
+					"item": [
+						{
+							"name": "Cart",
+							"item": [
+								{
+									"name": "Add To Cart",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{consumer.token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"product_id\": 1,\n        \"quantity\": 1\n    },\n    {\n        \"product_id\": 2,\n        \"quantity\": 1\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}/products/cart/add",
+											"host": [
+												"{{subdomain}}",
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stores",
+												"{{merchant.store.id}}",
+												"products",
+												"cart",
+												"add"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Remove From Cart",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{consumer.token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"product_id\": 1,\n        \"quantity\": 1\n    },\n    {\n        \"product_id\": 2,\n        \"quantity\": 2\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}/products/cart/remove",
+											"host": [
+												"{{subdomain}}",
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stores",
+												"{{merchant.store.id}}",
+												"products",
+												"cart",
+												"remove"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Cart",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{consumer.token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"product_id\": 1,\n        \"quantity\": 1\n    },\n    {\n        \"product_id\": 2,\n        \"quantity\": 1\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}/products/cart?with_total=1",
+											"host": [
+												"{{subdomain}}",
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stores",
+												"{{merchant.store.id}}",
+												"products",
+												"cart"
+											],
+											"query": [
+												{
+													"key": "with_total",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Details",
+							"item": [
+								{
+									"name": "Create Product Detail",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "name",
+													"value": "[Fr] Novella Hane",
+													"type": "text"
+												},
+												{
+													"key": "price",
+													"value": "100",
+													"type": "text"
+												},
+												{
+													"key": "language_id",
+													"value": "2",
+													"type": "text"
+												},
+												{
+													"key": "currency",
+													"value": "EGP",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}/products/1/details",
+											"host": [
+												"{{subdomain}}",
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stores",
+												"{{merchant.store.id}}",
+												"products",
+												"1",
+												"details"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Product Detail",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"[Fr] Novella Hane\",\n    \"price\": 101,\n    \"language_id\": 2,\n    \"currency\": \"EGP\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}/products/1/details/3",
+											"host": [
+												"{{subdomain}}",
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stores",
+												"{{merchant.store.id}}",
+												"products",
+												"1",
+												"details",
+												"3"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get Store's Products",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "en",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}/products?with_details=1",
+									"host": [
+										"{{subdomain}}",
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stores",
+										"{{merchant.store.id}}",
+										"products"
+									],
+									"query": [
+										{
+											"key": "having_quantity_more_than",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "with_details",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Product",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vat_included\": 0,\n    \"details\": {\n        \"name\": \"Galaxy Buds\",\n        \"price\": 2000,\n        \"currency\": \"EGP\",\n        \"language_id\": 1,\n        \"shipping_cost\": 123\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}/products",
+									"host": [
+										"{{subdomain}}",
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stores",
+										"{{merchant.store.id}}",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Product",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"quantity\": 10\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}/products/1",
+									"host": [
+										"{{subdomain}}",
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stores",
+										"{{merchant.store.id}}",
+										"products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update Store",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vat_percentage\": 0.1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{subdomain}}.{{host}}/api/stores/{{merchant.store.id}}",
+							"host": [
+								"{{subdomain}}",
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"stores",
+								"{{merchant.store.id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{merchant.token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "subdomain",
+			"value": "domain1"
+		},
+		{
+			"key": "host",
+			"value": "localhost:8000"
+		},
+		{
+			"key": "merchant.email",
+			"value": "merchant@localhost.com"
+		},
+		{
+			"key": "merchant.password",
+			"value": "1234"
+		},
+		{
+			"key": "merchant.token",
+			"value": ""
+		},
+		{
+			"key": "merchant.store.id",
+			"value": "1"
+		},
+		{
+			"key": "consumer.email",
+			"value": "consumer@localhost.com"
+		},
+		{
+			"key": "consumer.password",
+			"value": "1234"
+		},
+		{
+			"key": "consumer.token",
+			"value": ""
+		}
+	]
+}
