@@ -4,7 +4,7 @@
  * Seeding arguments and data.
  * 
  * @internal
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  * @see \Database\Seeders\DatabaseSeeder
  */
@@ -20,6 +20,13 @@ return [
     ],
 
     'data' => [
+
+        'subDomains' => [
+
+            'domain1',
+            'domain2'
+
+        ],
 
         'user_password' => '1234',
 

@@ -9,8 +9,19 @@ use Illuminate\Database\Eloquent\{ Model, Relations\BelongsTo };
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
+ * 
+ * @property integer $id
+ * @property integer $product_id
+ * @property integer $language_id
+ * @property string $name
+ * @property string $description
+ * @property float $price
+ * @property string $currency
+ * @property float $shipping_cost
+ * @property Product $product
+ * @property Language $language
  */
 final class ProductDetail extends Model {
 
@@ -27,7 +38,8 @@ final class ProductDetail extends Model {
         'name',
         'description',
         'price',
-        'currency'
+        'currency',
+        'shipping_cost'
     ];
 
     /**
