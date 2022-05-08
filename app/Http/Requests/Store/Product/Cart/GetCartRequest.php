@@ -3,14 +3,14 @@
 namespace App\Http\Requests\Store\Product\Cart;
 
 /**
- * Update Shopping Cart Request.
+ * Get Shopping Cart Request.
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.0.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
-final class UpdateCartRequest extends AbstractCartRequest {
+final class GetCartRequest extends AbstractCartRequest {
 
     /**
      * Gets the validation rules to be applied to inputs of this request.
@@ -25,9 +25,7 @@ final class UpdateCartRequest extends AbstractCartRequest {
      */
     public final function rules(): array {
         return [
-            '*'            => [ 'required', 'array', 'min:1' ],
-            '*.product_id' => [ 'required', 'exists:products,id' ],
-            '*.quantity'   => [ 'required', 'integer', 'min:1' ]
+            'with_total' => [ 'boolean' ]
         ];
     }
 }

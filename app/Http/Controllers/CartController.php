@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\{ Base\ApiRequest, Store\Product\Cart\UpdateCartRequest };
+use App\Http\Requests\Store\Product\Cart\{ GetCartRequest, UpdateCartRequest };
 
 /**
  * Cart Controller.
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class CartController extends ApiController {
@@ -76,13 +76,13 @@ final class CartController extends ApiController {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 2.0.0
      *
-     * @param ApiRequest $request
+     * @param GetCartRequest $request
      * @return JsonResponse
      */
-    public final function getCart(ApiRequest $request): JsonResponse {
-        return $this->getSuccessResponse($this->cartService->getCarts($request->user()->id));
+    public final function getCart(GetCartRequest $request): JsonResponse {
+        return $this->getSuccessResponse($this->cartService->getCarts($request->user()->id, null, $request->input('with_total', false)));
     }
 }
 

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class CartsRepository {
@@ -49,20 +49,35 @@ final class CartsRepository {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 2.0.0
      *
      * @param integer $consumerId
      * @param integer[]|null $productIds
+     * @param boolean $withProducts
+     * @param boolean $withStore
+     * @param boolean $withDetails
      * @return Collection
      */
-    public final function getCarts(int $consumerId, ?array $productIds): Collection {
+    public final function getCarts(int $consumerId, ?array $productIds, bool $withProducts, bool $withStore, bool $withDetails): Collection {
 
-        return tenant()->run(function() use ($consumerId, $productIds): Collection {
+        return tenant()->run(function() use ($consumerId, $productIds, $withProducts, $withStore, $withDetails): Collection {
 
             $cartsQuery = Cart::where('consumer_id', $consumerId);
 
             if (!is_null($productIds)) {
                 $cartsQuery->whereIn('product_id', $productIds);
+            }
+
+            if ($withProducts) {
+                $cartsQuery->with('product');
+            }
+            
+            if ($withStore) {
+                $cartsQuery->with('product.store');
+            }
+
+            if ($withDetails) {
+                $cartsQuery->with('product.details');
             }
 
             return $cartsQuery->get();

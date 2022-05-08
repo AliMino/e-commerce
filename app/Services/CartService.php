@@ -12,7 +12,7 @@ use App\Exceptions\Api\{ InsufficientCartProductsException, InvalidCartQuantityE
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class CartService {
@@ -63,7 +63,7 @@ final class CartService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.0.1
      *
      * @param integer $consumerId
      * @param integer[][] $productsQuantities
@@ -116,8 +116,12 @@ final class CartService {
                 ];
             }
 
-            $this->cartsRepository->createCarts($consumerId, $cartsToBeAdded);
-            $this->cartsRepository->updateCarts($cartsToBeUpdated);
+            if (0 < count($cartsToBeAdded)) {
+                $this->cartsRepository->createCarts($consumerId, $cartsToBeAdded);
+            }
+            if (0 < count($cartsToBeUpdated)) {
+                $this->cartsRepository->updateCarts($cartsToBeUpdated);
+            }
             $this->productService->deductProductsQuantities($productsQuantities);
 
         });
@@ -185,17 +189,49 @@ final class CartService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param integer $consumerId
      * @param integer[]|null $productsIds
+     * @param boolean $withTotal
      * @return Collection
      */
-    public final function getCarts(int $consumerId, ?array $productsIds = null): Collection {
+    public final function getCarts(int $consumerId, ?array $productsIds = null, bool $withTotal = false): Collection {
 
         $this->consumerService->getConsumer($consumerId);
 
-        return $this->cartsRepository->getCarts($consumerId, $productsIds);
+        $carts = $this->cartsRepository->getCarts($consumerId, $productsIds, $withTotal, $withTotal, $withTotal);
+
+        return $withTotal ? collect([ 'carts' => $carts, 'totals' => $this->getCartsTotals($carts) ]) : $carts;
+    }
+
+    /**
+     * Calculated te total cart price.
+     * 
+     * @internal
+     * @since 1.1.0
+     * @version 1.0.0
+     *
+     * @param Collection $carts
+     * @return float[]
+     */
+    private function getCartsTotals(Collection $carts): array {
+        /** @var float[] $totals */
+        $totals = [];
+        
+        /** @var Cart $cart */
+        foreach ($carts as $cart) {
+            $vatPercentage = (!$cart->product->vat_included) * $cart->product->store->vat_percentage;
+            
+            foreach ($cart->product->details as $productDetail) {
+                $totals[ $productDetail->currency ] = 
+                    ($totals[ $productDetail->currency ] ?? 0) + 
+                    (($cart->quantity + $vatPercentage) * $productDetail->price) +
+                    $productDetail->shipping_cost ?? 0;
+            }
+        }
+
+        return $totals;
     }
 
     /**
