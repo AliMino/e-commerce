@@ -3,6 +3,7 @@
 - [E-commerce](#e-commerce)
   - [Preparing the project](#preparing-the-project)
     - [Installing dependencies](#installing-dependencies)
+    - [Generating Authentication Secret Key](#generating-authentication-secret-key)
     - [Migrating The Database](#migrating-the-database)
     - [Seeding The Database](#seeding-the-database)
   - [Response Structure](#response-structure)
@@ -17,12 +18,20 @@
 
 ### Installing dependencies
 
-This project utilizes a set of first-party [^firstparty] & third-party laravel packages, those packages are listed below corresponding to thier installation commands.
+This project utilizes a couple of third-party laravel packages, those packages are listed below corresponding to thier installation commands.
 
-|    Package Name |                           URL                           | Installation Command               | First-Party | Third-Party |
-| --------------: | :-----------------------------------------------------: | :--------------------------------- | :---------: | :---------: |
-|  Stancl/Tenancy |  [Tenancy for laravel](https://tenancyforlaravel.com/)  | `composer require stancl/tenancy`  |             |      ✅      |
-| Laravel/Sanctum | [Laravel sanctum](https://laravel.com/docs/9.x/sanctum) | `composer require laravel/sanctum` |      ✅      |             |
+|    Package Name |                           URL                           | Installation Command               |
+| --------------: | :-----------------------------------------------------: | :--------------------------------- |
+|  Stancl/Tenancy |  [Tenancy for laravel](https://tenancyforlaravel.com/)  | `composer require stancl/tenancy`  |
+| Tymon/JWT-Auth | [jwt-auth](https://jwt-auth.readthedocs.io/en/develop/) | `composer require tymon/jwt-auth` |
+
+---
+
+### Generating Authentication Secret Key
+
+```bash
+php artisan jwt:secret
+```
 
 ---
 
@@ -96,7 +105,6 @@ For full requests & response reference, see [schema](docs/schema.md).
 - All tenants databases are hosted together.
 - Stateful (Session-based) authentication is used.
 
-[^firstparty]: First-party packages are most-likely to be pre-installed with laravel.
 [^req_1]: Merchants allowed only for their stores.
 
 ---

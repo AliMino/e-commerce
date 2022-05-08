@@ -12,7 +12,7 @@ use App\Exceptions\Api\{ EntityNotFoundException, ProductDetailAlreadyExistsExce
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.1.1
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductDetailService {
@@ -129,7 +129,7 @@ final class ProductDetailService {
      * @api
      * @final
      * @since 1.1.0
-     * @version 1.0.0
+     * @version 1.0.1
      *
      * @param integer $productDetailId
      * @param integer $productId
@@ -147,7 +147,10 @@ final class ProductDetailService {
 
         $productDetails = $this->getProductDetails($productId);
 
-        if (!is_null($languageId) && $productDetailId != $productDetails->where('language_id', $languageId)->first()->id) {
+        if (is_null($productDetails->where('id', $productDetailId)->first())) {
+            throw new EntityNotFoundException('ProductDetail', $productDetailId);
+        }
+        if (!is_null($languageId) && !is_null($detail = $productDetails->where('language_id', $languageId)->first()) && $productDetailId != $detail->id) {
             throw new ProductDetailAlreadyExistsException($productId, $languageId);
         }
         

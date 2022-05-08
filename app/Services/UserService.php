@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Repositories\UsersRepository;
 use App\Exceptions\Api\{ EntityNotFoundException, InvalidUserCredentialsException, UnauthorizedAccessException, UserEmailAlreadyExistsException };
 
@@ -10,7 +11,7 @@ use App\Exceptions\Api\{ EntityNotFoundException, InvalidUserCredentialsExceptio
  * User Business Service.
  * 
  * @api
- * @version 1.3.0
+ * @version 1.4.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 class UserService {
@@ -90,7 +91,7 @@ class UserService {
      * @api
      * @final
      * @since 1.2.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param string $email
      * @param string $password
@@ -101,18 +102,15 @@ class UserService {
      * @throws UnauthorizedAccessException
      */
     public final function authenticateUser(string $email, string $password, string $role): string {
-        if (is_null($user = $this->usersRepository->getUserByEmail($email))) {
+        if (!auth()->attempt(compact('email', 'password')) || is_null($user = $this->usersRepository->getUserByEmail($email))) {
             throw new InvalidUserCredentialsException($email);
-        }
-        if (!$this->generalService->checkHash($password, $user->password)) {
-            throw new InvalidUserCredentialsException($email, $password);
         }
         
         if ($role != $user->role->name) {
             throw new UnauthorizedAccessException("$role required");
         }
 
-        return $user->createToken('auth-token')->plainTextToken;
+        return JWTAuth::customClaims([])->fromUser($this->usersRepository->getUserByEmail($email));
     }
 
     /**

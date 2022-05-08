@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\{ Notifications\Notifiable, Foundation\Auth\User as Authenticatable };
 use Illuminate\Database\Eloquent\{ Factories\HasFactory, Relations\BelongsTo, Relations\HasMany };
 
@@ -11,12 +11,12 @@ use Illuminate\Database\Eloquent\{ Factories\HasFactory, Relations\BelongsTo, Re
  * 
  * @api
  * @final
- * @version 1.2.1
+ * @version 1.3.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
-final class User extends Authenticatable {
+final class User extends Authenticatable implements JWTSubject {
 
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -103,5 +103,35 @@ final class User extends Authenticatable {
      */
     public final function isConsumer(): bool {
         return 'consumer' == $this->role->name;
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     * 
+     * @api
+     * @final
+     * @override
+     * @since 1.3.0
+     * @version 1.0.0
+     *
+     * @return integer
+     */
+    public final function getJWTIdentifier() {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     * 
+     * @api
+     * @final
+     * @override
+     * @since 1.3.0
+     * @version 1.0.0
+     *
+     * @return mixed[]
+     */
+    public final function getJWTCustomClaims() {
+        return [];
     }
 }

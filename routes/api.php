@@ -26,7 +26,7 @@ Route::middleware('tenant')->group(function() {
     Route::group([ 'prefix' => 'consumers'  ], __DIR__ . '/api/consumers.php');
     
     // Protected Routes...
-    Route::middleware('auth:sanctum')->group(function() {
+    Route::middleware('auth:api')->group(function() {
 
         Route::group([ 'prefix' => 'stores'     ], __DIR__ . '/api/stores.php');
 

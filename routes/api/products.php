@@ -12,9 +12,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 
-// *****************************************************
-// **** Applied Middlewares: tenant & auth:sanctum. ****
-// *****************************************************
+// *************************************************
+// **** Applied Middlewares: tenant & auth:api. ****
+// *************************************************
 
 Route::controller(ProductController::class)->group(function() {
     
