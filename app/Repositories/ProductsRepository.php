@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\{ Builder, Collection };
 
 /**
@@ -10,10 +11,10 @@ use Illuminate\Database\Eloquent\{ Builder, Collection };
  * 
  * @api
  * @final
- * @version 1.3.0
+ * @version 1.4.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
-final class ProductsRepository {
+final class ProductsRepository extends AbstractRepository {
 
     /**
      * Retrieves all products.
@@ -221,25 +222,52 @@ final class ProductsRepository {
     }
 
     /**
-     * Deducts the specified quantity from the specified product's stock.
+     * Updates the specified products' quantities.
      * 
      * @api
      * @final
-     * @since 1.2.0
+     * @since 1.4.0
      * @version 1.0.0
      *
-     * @param integer $productId
-     * @param integer $quantity
-     * @return void
+     * @param integer[][] $productsQuantities
+     * @return integer
      */
-    public final function deductProductQuantity(int $productId, int $quantity): void {
+    public final function updateProductsQuantities(array $productsQuantities): int {
 
-        tenant()->run(function() use ($productId, $quantity) {
+        return tenant()->run(function() use ($productsQuantities): int {
 
-            $product = $this->findProduct($productId);
-            $product->current_quantity -= $quantity;
-            $product->save();
+            $cases = [];
+            foreach ($productsQuantities as $productQuantity) {
+                $cases[ 'id = ' . $productQuantity['product_id'] ] = $productQuantity['quantity'];
+            }
+            
+            return DB::update(
+                'UPDATE ' . ((new Product())->getTable()) . 
+                "\nSET current_quantity = " .
+                $this->buildCaseQuery($cases) . ';'
+            );
 
         });
+    }
+
+    /**
+     * Gets products by their IDs.
+     * 
+     * @api
+     * @final
+     * @since 1.4.0
+     * @version 1.0.0
+     *
+     * @param integer[] $productsIds
+     * @return Collection
+     */
+    public final function getProductsByIds(array $productsIds): Collection {
+
+        return tenant()->run(function() use ($productsIds): Collection {
+
+            return Product::whereIn('id', $productsIds)->get();
+
+        });
+
     }
 }

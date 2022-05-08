@@ -12,7 +12,7 @@ use App\Exceptions\Api\{ EntityNotFoundException, InsufficientProductsException,
  * 
  * @api
  * @final
- * @version 1.3.0
+ * @version 1.4.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductService {
@@ -225,15 +225,23 @@ final class ProductService {
      * @api
      * @final
      * @since 1.2.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param integer[][] $productsQuantities
-     * @return void
+     * @return integer
      */
-    public final function deductProductsQuantities(array $productsQuantities): void {
+    public final function deductProductsQuantities(array $productsQuantities): int {
+        $products = $this->getProductsByIds(array_unique(array_column($productsQuantities, 'product_id')));
+        $newQuantities = [];
+       
         foreach ($productsQuantities as $productQuantity) {
-            $this->productsRepository->deductProductQuantity($productQuantity[ 'product_id' ], $productQuantity[ 'quantity' ]);
+            $newQuantities[] = [
+                'product_id' => $id = $productQuantity[ 'product_id' ],
+                'quantity'   => $products->where('id', $id)->first()->current_quantity - $productQuantity[ 'quantity' ]
+            ];
         }
+
+        return $this->productsRepository->updateProductsQuantities($newQuantities);
     }
 
     /**
@@ -290,5 +298,20 @@ final class ProductService {
         $this->getProductById($productId, $storeId, true);
         
         return $this->productDetailService->updateProductDetail($productDetailId, $productId, $name, $description, $price, $languageId, $currency, $shippingCost);
+    }
+
+    /**
+     * Retrieves products by their IDs.
+     * 
+     * @api
+     * @final
+     * @since 1.4.0
+     * @version 1.0.0
+     *
+     * @param integer[] $productsIds
+     * @return Collection
+     */
+    public final function getProductsByIds(array $productsIds): Collection {
+        return $this->productsRepository->getProductsByIds($productsIds);
     }
 }

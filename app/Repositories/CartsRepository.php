@@ -11,10 +11,10 @@ use Illuminate\Database\Eloquent\Collection;
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
-final class CartsRepository {
+final class CartsRepository extends AbstractRepository {
 
     /**
      * Creates a new cart items.
@@ -92,7 +92,7 @@ final class CartsRepository {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param integer[][] $cartsQuantities
      * @return integer
@@ -101,16 +101,15 @@ final class CartsRepository {
 
         return tenant()->run(function() use ($cartsQuantities): int {
 
+            $cases = [];
+
+            foreach ($cartsQuantities as $cartQuantity) {
+                $cases[ 'id = ' . $cartQuantity['cart_id'] ] = $cartQuantity['quantity'];
+            }
+
             return DB::update(
-                'UPDATE ' . ((new Cart)->getTable()) .
-                "\nSET quantity = CASE\n" .
-                implode('', array_map(
-                    fn(array $cartQuantity) => sprintf("\tWHEN id = %d THEN %d\n", $cartQuantity['cart_id'], $cartQuantity['quantity']),
-                    $cartsQuantities
-                )) .
-                "END\nWHERE id IN (" .
-                    implode(', ', array_column($cartsQuantities, 'cart_id')) .
-                ');'
+                'UPDATE ' . ((new Cart)->getTable()) . "\nSET quantity = " . $this->buildCaseQuery($cases) .
+                "\nWHERE id IN (" . implode(', ', array_column($cartsQuantities, 'cart_id')) . ');'
             );
 
         });
