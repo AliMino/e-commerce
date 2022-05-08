@@ -4,7 +4,7 @@
  * Products Routes.
  * 
  * @internal
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 
@@ -26,7 +26,9 @@ Route::controller(ProductController::class)->group(function() {
     
         Route::put('', 'updateStoreProduct');
     
-    });    
+        Route::prefix('details')->group(__DIR__ . '/product-details.php');
+
+    });
     
 });
 

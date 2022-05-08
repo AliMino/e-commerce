@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\{ Builder, Collection };
  * 
  * @api
  * @final
- * @version 1.2.0
+ * @version 1.3.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductsRepository {
@@ -75,16 +75,28 @@ final class ProductsRepository {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param integer $productId
+     * @param integer|null $storeId
+     * @param bool $withDetails
      * @return Product|null
      */
-    public final function findProduct(int $productId): ?Product {
+    public final function findProduct(int $productId, ?int $storeId = null, bool $withDetails = false): ?Product {
 
-        return tenant()->run(function() use ($productId) {
+        return tenant()->run(function() use ($productId, $storeId, $withDetails): ?Product {
 
-            return Product::find($productId);
+            $productsQuery = Product::where('id', $productId);
+
+            if (!is_null($storeId)) {
+                $productsQuery->where('store_id', $storeId);
+            }
+
+            if ($withDetails) {
+                $productsQuery->with('details');
+            }
+
+            return $productsQuery->first();
 
         });
 

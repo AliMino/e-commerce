@@ -5,11 +5,11 @@ namespace App\Http\Requests\Store\Product;
 use App\Http\Requests\Store\MerchantStoreRequest;
 
 /**
- * Create Products Request.
+ * Create Product Request.
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class CreateProductRequest extends MerchantStoreRequest {
@@ -21,7 +21,7 @@ final class CreateProductRequest extends MerchantStoreRequest {
      * @final
      * @override
      * @since 1.0.0
-     * @version 1.1.0
+     * @version 1.2.0
      *
      * @return string[][]
      */
@@ -35,6 +35,7 @@ final class CreateProductRequest extends MerchantStoreRequest {
             'details.price'         => [ 'required', 'numeric' ],
             'details.language_id'   => [ 'required', 'numeric', 'exists:languages,id' ],
             'details.currency'      => [ 'required', 'string', 'min:1' ],
+            'details.shipping_cost' => [ 'numeric', 'min:0' ],
         ];
     }
 }

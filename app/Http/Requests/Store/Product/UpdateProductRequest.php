@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Store\Product;
 
-use App\Constants\Validation;
 use App\Http\Requests\Store\MerchantStoreRequest;
 
 /**
@@ -10,7 +9,7 @@ use App\Http\Requests\Store\MerchantStoreRequest;
  * 
  * @api
  * @final
- * @version 1.1.0
+ * @version 1.2.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class UpdateProductRequest extends MerchantStoreRequest {
@@ -22,14 +21,15 @@ final class UpdateProductRequest extends MerchantStoreRequest {
      * @final
      * @override
      * @since 1.0.0
-     * @version 1.1.0
+     * @version 1.2.0
      *
      * @return string[][]
      */
     public final function rules(): array {
         return [
             'vat_included'  => [ 'boolean' ],
-            'quantity'      => [ 'integer', 'min:0' ]
+            'quantity'      => [ 'integer', 'min:0' ],
+            'shipping_cost' => [ 'numeric', 'min:0' ]
         ];
     }
 }

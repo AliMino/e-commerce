@@ -93,8 +93,9 @@ For full requests & response reference, see [schema](docs/schema.md).
 
 ## Known Issues
 
-- All tenants databases live on the same host.
-- Stateful (Session) authentication is used.
+- All tenants databases are hosted together.
+- Stateful (Session-based) authentication is used.
+- Products' quantities is deducted via multiple database queries, [see](app/Services/ProductService.php#L194).
 
 [^firstparty]: First-party packages are most-likely to be pre-installed with laravel.
 [^req_1]: Merchants allowed only for their stores.

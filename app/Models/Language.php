@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @api
  * @final
- * @version 1.0.0
+ * @version 1.1.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class Language extends Model {
@@ -23,4 +23,13 @@ final class Language extends Model {
      */
     public $timestamps = false;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @since 1.1.0
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name', 'code'
+    ];
 }

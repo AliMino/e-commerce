@@ -2,17 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\Product;
 use App\Repositories\ProductsRepository;
+use App\Models\{ Product, ProductDetail };
 use Illuminate\Support\{ Collection, Facades\DB };
-use App\Exceptions\Api\{ EntityNotFoundException, InsufficientProductsException, ProductNotFoundException, UnauthorizedAccessException };
+use App\Exceptions\Api\{ EntityNotFoundException, InsufficientProductsException, ProductDetailAlreadyExistsException, ProductNotFoundException, UnauthorizedAccessException };
 
 /**
  * Product Business Service.
  * 
  * @api
  * @final
- * @version 1.2.0
+ * @version 1.3.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductService {
@@ -63,10 +63,11 @@ final class ProductService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 2.0.0
+     * @version 3.0.0
      *
      * @param integer|null $storeId
      * @param integer|null $quantityThreshold
+     * @param boolean $withDetails
      * @return Collection
      */
     public final function getProducts(?int $storeId, ?int $quantityThreshold, bool $withDetails): Collection {
@@ -75,7 +76,7 @@ final class ProductService {
 
         $products = $this->productsRepository->getProducts($storeId, $quantityThreshold);
 
-        return $withDetails ? $products->load('details') :$products;
+        return $withDetails ? $products->load('details') : $products;
     }
 
     /**
@@ -84,7 +85,7 @@ final class ProductService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.1.0
+     * @version 2.0.0
      *
      * @param integer $storeId
      * @param string $name
@@ -92,20 +93,21 @@ final class ProductService {
      * @param float $price
      * @param boolean $vatIncluded
      * @param integer|null $quantity
+     * @param float|null $shippingCost
      * @return Product
      */
-    public final function createProduct(int $storeId, string $name, ?string $description, float $price, int $languageId, string $currency, bool $vatIncluded, ?int $quantity): Product {
+    public final function createProduct(int $storeId, string $name, ?string $description, float $price, int $languageId, string $currency, bool $vatIncluded, ?int $quantity, ?float $shippingCost): Product {
         
         /** @var Product|null $product */
         $product = null;
         
-        DB::transaction(function() use ($storeId, &$product, $name, $description, $price, $languageId, $currency , $vatIncluded, $quantity) {
+        DB::transaction(function() use ($storeId, &$product, $name, $description, $price, $languageId, $currency , $vatIncluded, $quantity, $shippingCost) {
             
             $this->storeService->getStoreById($storeId);
             
             $product = $this->productsRepository->createProduct($storeId, $vatIncluded, $quantity ?? 0);
 
-            $this->productDetailService->createProductDetail($product->id, $languageId, $name, $description, $price, $currency);
+            $this->productDetailService->createProductDetail($product->id, $languageId, $name, $description, $price, $currency, $shippingCost);
 
         });
 
@@ -146,15 +148,17 @@ final class ProductService {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.0.0
+     * @version 1.1.0
      *
      * @param integer $productId
+     * @param integer|null $storeId
+     * @param boolean $withDetails
      * @return Product
      * 
      * @throws EntityNotFoundException
      */
-    public final function getProductById(int $productId): Product {
-        if (is_null($product = $this->productsRepository->findProduct($productId))) {
+    public final function getProductById(int $productId, ?int $storeId = null, bool $withDetails = false): Product {
+        if (is_null($product = $this->productsRepository->findProduct($productId, $storeId, $withDetails))) {
             throw new EntityNotFoundException('Product', $productId);
         }
 
@@ -230,5 +234,61 @@ final class ProductService {
         foreach ($productsQuantities as $productQuantity) {
             $this->productsRepository->deductProductQuantity($productQuantity[ 'product_id' ], $productQuantity[ 'quantity' ]);
         }
+    }
+
+    /**
+     * Creates a new product detail with the specified details.
+     * 
+     * @api
+     * @final
+     * @since 1.3.0
+     * @version 1.0.0
+     *
+     * @param integer $productId
+     * @param integer $storeId
+     * @param string $name
+     * @param string|null $description
+     * @param float $price
+     * @param integer $languageId
+     * @param string $currency
+     * @param float|null $shippingCost
+     * @return ProductDetail
+     * 
+     * @throws ProductDetailAlreadyExistsException
+     */
+    public final function createProductDetail(int $productId, int $storeId, string $name, ?string $description, float $price, int $languageId, string $currency, ?float $shippingCost): ProductDetail {
+        $product = $this->getProductById($productId, $storeId, true);
+
+        if ($product->details->pluck('language_id')->contains($languageId)) {
+            throw new ProductDetailAlreadyExistsException($productId, $languageId);
+        }
+
+        return $this->productDetailService->createProductDetail($productId, $languageId, $name, $description, $price, $currency, $shippingCost);
+    }
+
+    /**
+     * Updates the specified product detail.
+     * 
+     * @api
+     * @final
+     * @since 1.3.0
+     * @version 1.0.0
+     *
+     * @param integer $productDetailId
+     * @param integer $productId
+     * @param integer $storeId
+     * @param string|null $name
+     * @param string|null $description
+     * @param float|null $price
+     * @param integer|null $languageId
+     * @param string|null $currency
+     * @param float|null $shippingCost
+     * @return ProductDetail
+     */
+    public final function updateProductDetail(int $productDetailId, int $productId, int $storeId, ?string $name, ?string $description, ?float $price, ?int $languageId, ?string $currency, ?float $shippingCost): ProductDetail {
+        
+        $this->getProductById($productId, $storeId, true);
+        
+        return $this->productDetailService->updateProductDetail($productDetailId, $productId, $name, $description, $price, $languageId, $currency, $shippingCost);
     }
 }

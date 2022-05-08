@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Store\Product\{ CreateProductRequest, GetProductsRequest, UpdateProductRequest };
+use App\Http\Requests\Store\Product\Details\{ CreateProductDetailRequest, UpdateProductDetailRequest };
 
 /**
  * Product Controller.
  * 
  * @api
  * @final
- * @version 1.2.0
+ * @version 1.3.0
  * @author Ali M. Kamel <ali.kamel.dev@gmail.com>
  */
 final class ProductController extends ApiController {
@@ -66,7 +67,7 @@ final class ProductController extends ApiController {
      * @api
      * @final
      * @since 1.0.0
-     * @version 1.1.0
+     * @version 1.2.0
      *
      * @param CreateProductRequest $request
      * @param integer $storeId
@@ -82,7 +83,8 @@ final class ProductController extends ApiController {
                 $request->input('details.language_id'),
                 $request->input('details.currency'),
                 $request->input('vat_included'),
-                $request->input('quantity')
+                $request->input('quantity'),
+                $request->input('details.shipping_cost'),
             )
         );
     }
@@ -107,6 +109,64 @@ final class ProductController extends ApiController {
                 $storeId,
                 $request->input('vat_included'),
                 $request->input('quantity')
+            )
+        );
+    }
+
+    /**
+     * Creates a new product detail.
+     * 
+     * @api
+     * @final
+     * @since 1.3.0
+     * @version 1.0.0
+     *
+     * @param CreateProductDetailRequest $request
+     * @param integer $storeId
+     * @param integer $productId
+     * @return JsonResponse
+     */
+    public final function createProductDetail(CreateProductDetailRequest $request, int $storeId, int $productId): JsonResponse {
+        return $this->getSuccessResponse(
+            $this->productService->createProductDetail(
+                $productId,
+                $storeId,
+                $request->input('name'),
+                $request->input('description'),
+                $request->input('price'),
+                $request->input('language_id'),
+                $request->input('currency'),
+                $request->input('shipping_cost')
+            )
+        );
+    }
+
+    /**
+     * Updates the specified product detail.
+     * 
+     * @api
+     * @final
+     * @since 1.3.0
+     * @version 1.0.0
+     *
+     * @param UpdateProductDetailRequest $request
+     * @param integer $storeId
+     * @param integer $productId
+     * @param integer $productDetailId
+     * @return JsonResponse
+     */
+    public final function updateProductDetail(UpdateProductDetailRequest $request, int $storeId, int $productId, int $productDetailId): JsonResponse {
+        return $this->getSuccessResponse(
+            $this->productService->updateProductDetail(
+                $productDetailId,
+                $productId,
+                $storeId,
+                $request->input('name'),
+                $request->input('description'),
+                $request->input('price'),
+                $request->input('language_id'),
+                $request->input('currency'),
+                $request->input('shipping_cost')
             )
         );
     }
